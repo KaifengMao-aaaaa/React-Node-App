@@ -1,22 +1,16 @@
 import './App.css';
 import axions from 'axios'
 import React, {useState, useEffect} from 'react';
+import {BrowserRouter, Route, Routes, Link} from 'react-router-dom'
+import HomePage from './pages/homepage';
 function App() {
-  const [userName,setUsername] = useState('')
-  useEffect(() => {
-    getNames()
-  }, [])
-
-  const getNames = async () => {
-    const response = await axions.get('/api')
-    setUsername(response.data)
-
-  }
+  
   return (
-    <>
-      <h1>  My frontend </h1>
-      <h3> My name is {userName.message}</h3>
-    </>
+    <BrowserRouter>
+      <Routes>
+        <Route path= '/' element = {<HomePage/>} />
+      </Routes>
+    </BrowserRouter>
   )
 }
 
