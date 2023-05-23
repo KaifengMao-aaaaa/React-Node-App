@@ -1,10 +1,8 @@
-import React from "react";
 
-export default function HomePage() {
-
-    return (
-        <h1>
-            it is home
-        </h1>
-    )
+import * as React from 'react';
+import Body from '../components/Layout/Body';
+export default function Dashboard() {
+  return (
+      <Body/>
+  );
 }

@@ -11,3 +11,38 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+.container {
+  display: flex;
+}
+.side-nav {
+  width: 130px;
+  background-color: #383838;
+  height: 100vh;
+  padding: 20px;
+  display: flex;
+}
+
+nav a {
+  display: block;
+  text-decoration: none;
+  color: #1e1e1e;
+  height: 50px;
+  font-weight: bold;
+  font-size: 2.0ex;
+}
+.confirm {
+  color: rgb(52, 52, 52);
+  background-color: aquamarine;
+  
+}
+.rightContent {
+  color: #000;
+  width: 300px;
+  height: 300px;
+  margin-left: 20px; /* Adjust the margin as needed */
+  border: 3px solid black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #fff;
+}
