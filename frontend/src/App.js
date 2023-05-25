@@ -5,16 +5,28 @@ import {BrowserRouter, Route, Routes} from 'react-router-dom'
 import HomePage from './pages/homepage';
 import SideBar from './components/Layout/SideBar';
 import LoginPage from './pages/loginpage';
+import OrderPage from './pages/orderpage';
+import StorePage from './pages/storePage';
+import OrderDetailPage from './pages/orderDetailPage';
+import ProductPage from './pages/productpage';
+import ProductDetailPage from './pages/productDetailPage';
+import Test from './components/test';
 function App() {
   
   return (
     <BrowserRouter>
       <Routes>
+        <Route path= '/test' element = {<Test/>} />
         <Route exact path='login' element = {<LoginPage />}/>
         <Route element = {<SideBar/>}>
           <Route path= '/' element = {<HomePage/>} />
-          <Route path= '/order/:orderId' element = {<HomePage/>} />
-          <Route path= '/user/:userId' element = {<HomePage/>} />
+          <Route path= '/order' element = {<OrderPage/>} />
+          <Route path= '/order/:orderId' element = {<OrderDetailPage/>} />
+          <Route path= '/store' element = {<StorePage/>} />
+          <Route path= '/product' element = {<ProductPage/>} />
+          <Route path= '/product/:productId' element = {<ProductDetailPage/>} />
+
+          {/* <Route path= '/user/:userId' element = {<HomePage/>} /> */}
         </Route>
       </Routes>
     </BrowserRouter>

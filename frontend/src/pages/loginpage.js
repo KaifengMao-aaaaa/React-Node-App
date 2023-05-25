@@ -33,7 +33,6 @@ const defaultTheme = createTheme();
 
 export default function LoginPage(props) {
     const history = useNavigate()
-    console.log(history)
     const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);

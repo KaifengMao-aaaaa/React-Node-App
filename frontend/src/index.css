@@ -46,3 +46,7 @@ nav a {
   justify-content: center;
   background-color: #fff;
 }
+
+.traditionPaper {
+  margin-top: 100px;margin-left: 60px; width: 600; padding: 20px
+}

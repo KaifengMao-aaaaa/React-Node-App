@@ -9,28 +9,56 @@ import PeopleIcon from '@mui/icons-material/People';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import LayersIcon from '@mui/icons-material/Layers';
 import AssignmentIcon from '@mui/icons-material/Assignment';
+import { Button, Drawer, TextField } from '@mui/material';
+export const MainListItems = () => {
+  const [drawerOpen, setDrawerOpen] = React.useState(false);
+  const [name, setName] = React.useState('');
 
-export const mainListItems = (
+  const toggleDrawer = () => {
+    setDrawerOpen(!drawerOpen);
+  };
+
+  const handleNameChange = event => {
+    setName(event.target.value);
+  };
+
+  const handleSubmit = event => {
+    event.preventDefault();
+    // Perform form submission logic here
+    // Reset form fields
+    console.log(event.currentTarget.id);
+    setName('');
+    // Close the drawer
+    setDrawerOpen(false);
+  };
+  return (
   <React.Fragment>
-    <ListItemButton>
+    <ListItemButton href='/'>
       <ListItemIcon>
         <DashboardIcon />
       </ListItemIcon>
-      <ListItemText primary="Dashboard" />
+      <ListItemText primary="主页" />
     </ListItemButton>
-    <ListItemButton>
+    <ListItemButton href='/order'>
       <ListItemIcon>
         <ShoppingCartIcon />
       </ListItemIcon>
-      <ListItemText primary="Orders" />
+      <ListItemText primary="订单" />
     </ListItemButton>
-    <ListItemButton>
+    <ListItemButton  href='/store'>
       <ListItemIcon>
         <PeopleIcon />
       </ListItemIcon>
-      <ListItemText primary="Customers" />
+      <ListItemText primary="仓库" />
     </ListItemButton>
-    <ListItemButton>
+    <ListItemButton  href='/product'>
+      <ListItemIcon>
+        <PeopleIcon />
+      </ListItemIcon>
+      <ListItemText primary="产品" />
+    </ListItemButton>
+
+    {/* <ListItemButton>
       <ListItemIcon>
         <BarChartIcon />
       </ListItemIcon>
@@ -41,9 +69,9 @@ export const mainListItems = (
         <LayersIcon />
       </ListItemIcon>
       <ListItemText primary="Integrations" />
-    </ListItemButton>
+    </ListItemButton> */}
   </React.Fragment>
-);
+)};
 
 export const secondaryListItems = (
   <React.Fragment>
