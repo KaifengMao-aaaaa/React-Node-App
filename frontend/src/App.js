@@ -10,6 +10,7 @@ import StorePage from './pages/storePage';
 import OrderDetailPage from './pages/orderDetailPage';
 import ProductPage from './pages/productpage';
 import ProductDetailPage from './pages/productDetailPage';
+import UserPage from './pages/userPage';
 import Test from './components/test';
 function App() {
   
@@ -25,8 +26,7 @@ function App() {
           <Route path= '/store' element = {<StorePage/>} />
           <Route path= '/product' element = {<ProductPage/>} />
           <Route path= '/product/:productId' element = {<ProductDetailPage/>} />
-
-          {/* <Route path= '/user/:userId' element = {<HomePage/>} /> */}
+          <Route path= '/user' element = {<UserPage/>} />
         </Route>
       </Routes>
     </BrowserRouter>

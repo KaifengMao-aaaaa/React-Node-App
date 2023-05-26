@@ -64,8 +64,28 @@ app.get("/store/listall", (req, res) => {
   res.json({storeList: [{id: 3,material:'fish', using:1003, remaining: 299, total: 2000},
 {id:6,material:'fish', using:1003, remaining: 299, total: 2000},
 {id:9,material:'fish', using:1030, remaining: 2939, total: 20300}]})
-
 });
+app.get("/user/listall", (req, res) => {
+  res.json({users:[
+    {
+      name: 'peopl1',
+      id: 1
+    },{
+      name: 'people2',
+      id: 2
+    },{
+      name: 'people3',
+      id: 3
+    },{
+      name: 'people4',
+      id: 5
+    },{
+      name: 'people5',
+      id: 9
+    }
+  ]});
+});
+
 app.put("/product/editName", (req, res) => {
   console.log(req.body)
 });

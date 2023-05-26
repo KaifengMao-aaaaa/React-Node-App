@@ -1,0 +1,1 @@
+export const backgroundColour = 'rgb(247, 247, 248'
