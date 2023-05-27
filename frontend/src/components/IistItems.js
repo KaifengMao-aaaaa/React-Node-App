@@ -64,12 +64,13 @@ export const MainListItems = () => {
       </ListItemIcon>
       <ListItemText primary="用户" />
     </ListItemButton>
-    {/* <ListItemButton>
+
+    <ListItemButton href='/user/login'>
       <ListItemIcon>
         <LayersIcon />
       </ListItemIcon>
-      <ListItemText primary="Integrations" />
-    </ListItemButton> */}
+      <ListItemText primary="退出" />
+    </ListItemButton>
   </React.Fragment>
 )};
 

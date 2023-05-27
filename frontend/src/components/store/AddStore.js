@@ -3,29 +3,28 @@ import { TextField, Button, FormControl, InputLabel, Select, orderImformation, M
 import axions from 'axios'
 const AddMaterial = (props) => {
     const [amount, setAmount] = useState('');
-    const [type, setType] = useState('');
     const [materialsOptions, setmaterialOptions] = useState([])
-    const [selectedMaterial, setSelectedMaterial] = React.useState('')
-    const [upLoadCount, setUploadCount] = React.useState(0)
+    const [selectedMaterial, setSelectedMaterial] = React.useState(null)
     const handleAmountChange = (event) => {
         setAmount(event.target.value);
     };
     const handleSubmit = (event) => {
         event.preventDefault();
-        axions.post('/store/add',{amount, materialType: type})
+        axions.post('/store/add',{amount: amount, materialName: selectedMaterial})
             .catch((e) => console.log(e))
         setAmount('');
-        setType('');
-        setUploadCount(upLoadCount + 1)
+        setSelectedMaterial(null)
+        props.updateTableTriger((prev) => prev + 1)
     };
     React.useEffect(function() {
-        axions.get('/product/type')
-            .then(({data}) => {setmaterialOptions(data.productsType)})
-    }, [upLoadCount])
+        axions.get('/store/alltype')
+            .then(({data}) => {setmaterialOptions(data.allMaterialType)})
+    }, [])
 
   const handleAnyChange = (value) => {
     setSelectedMaterial(value.target.value)
   }
+  console.log(materialsOptions)
   return (
     <form style={{display:'flex'}}>
             <FormControl variant="outlined" style={{width:200, marginRight:10}}>
@@ -36,7 +35,7 @@ const AddMaterial = (props) => {
                 name= 'productOption'
             >
                 {materialsOptions.map((option, index) => (
-                <MenuItem key={index} value={option}>{option}</MenuItem>
+                <MenuItem key={index} value={option.materialName}>{option.materialName}</MenuItem>
                 ))}
             </Select>
             </FormControl>
@@ -47,7 +46,7 @@ const AddMaterial = (props) => {
         required
         />
         <Button onClick={handleSubmit}>提交</Button>
-        <Button onClick={() => props.closeTriger(false)}>关闭</Button>
+        <Button onClick={() => props.closeTriger(null)}>关闭</Button>
       
     </form>
   );

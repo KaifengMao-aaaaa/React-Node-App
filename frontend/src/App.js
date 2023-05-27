@@ -8,6 +8,7 @@ import LoginPage from './pages/loginpage';
 import OrderPage from './pages/orderpage';
 import StorePage from './pages/storePage';
 import OrderDetailPage from './pages/orderDetailPage';
+import SignUp from './pages/registerPage';
 import ProductPage from './pages/productpage';
 import ProductDetailPage from './pages/productDetailPage';
 import UserPage from './pages/userPage';
@@ -18,7 +19,8 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path= '/test' element = {<Test/>} />
-        <Route exact path='login' element = {<LoginPage />}/>
+        <Route exact path='/user/login' element = {<LoginPage />}/>
+        <Route exact path='/user/register' element = {<SignUp />}/>
         <Route element = {<SideBar/>}>
           <Route path= '/' element = {<HomePage/>} />
           <Route path= '/order' element = {<OrderPage/>} />

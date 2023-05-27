@@ -4,8 +4,8 @@ import { DataGrid } from '@mui/x-data-grid';
 import axions from 'axios'
 const columns = [
     {field: 'id', headerName: 'ID'},
-  { field: 'material', headerName: '物料', type:'text'},
-  { field: 'using', headerName: '正在使用', type:'number'},
+  { field: 'materialName', headerName: '物料', type:'text'},
+  { field: 'consuming', headerName: '正在使用', type:'number'},
   {
     field: 'remaining',
     headerName: '剩余',
@@ -16,18 +16,25 @@ const columns = [
     headerName: '合计',
     type: 'number',
     valueGetter: (params) =>
-      params.row.remaining + params.row.using
+      params.row.remaining + params.row.consuming
     },
 ];
 
-export default function DataTable() {
+export default function DataTable(props) {
     const [storeDate, setStroeData] = React.useState([])
     React.useEffect(function() {
         axions.get('/store/listall')
-            .then(({data}) => {setStroeData(data.storeList)})
+            .then(({data}) => {
+              const newData = data.storeList.map((data, index) => {
+                return {
+                  ...data,
+                  id: index
+                }
+              })
+              setStroeData(newData)
+            })
             .catch((e) => console.log(e))
-    }, [])
-    console.log(storeDate)
+    }, [props.update])
 
     function handleClickBox(event) {
         console.log(event)
