@@ -31,7 +31,7 @@ function Copyright(props) {
 // TODO remove, this demo shouldn't need to reset the theme.
 
 const defaultTheme = createTheme();
-export default function SignUp() {
+export default function SignUp(props) {
     const history = useNavigate()
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -40,8 +40,10 @@ export default function SignUp() {
             name: data.get('firstName') + data.get('lastName'),
             email: data.get('email'),
             password: data.get('password')
-        }) .catch((e) => console.log(e))
-        history('/user/login')
+        }) 
+          .then(({data}) => props.saveId(data.userId))
+          .catch((e) => console.log(e))
+          history('/user/login')
     };
 
   return (

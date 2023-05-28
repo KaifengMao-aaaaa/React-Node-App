@@ -27,8 +27,9 @@ router.post("/add",async (req, res, next) => {
   }
 });
 router.post("/addType",async(req, res, next) => {
+  const {materialName, unit, unitPrice} = req.body
   try {
-    res.json(await storeAddType(req.body.materialName))
+    res.json(await storeAddType(materialName, unit, unitPrice))
   } catch(e) {
     next(e)
   }

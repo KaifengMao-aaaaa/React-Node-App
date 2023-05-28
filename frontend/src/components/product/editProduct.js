@@ -12,8 +12,9 @@ export default function EditProduct(props) {
     const [text, setText] = React.useState('')
     function editValue(event) {
         event.preventDefault();
-        if (props.selected.field in paths) {
-            axions.put(paths[props.selected.field], {[props.selected.field]: text})
+        if (props.selected && props.selected.field in paths) {
+            axions.put(paths[props.selected.field], {[props.selected.field]: text, productId: props.selected.productId})
+                .then(props.updateSelected(null))
                 .catch((e)=> console.log(e))
         }
     }
@@ -21,7 +22,7 @@ export default function EditProduct(props) {
        setText(event.target.value)
     }
     return (<Paper style={{display:"flex"}}>
-            <TextField onChange={handleChnage} variant="outlined" label= '修改成' placeholder={props.selected && props.selected.value}></TextField> 
+            <TextField onChange={handleChnage} variant="outlined" label= {props.selected && String(props.selected.value)} placeholder={props.selected && String(props.selected.value)}></TextField> 
             <Button type="button" onClick={editValue} variant="contained">确认</Button>
         </Paper>
     )

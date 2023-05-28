@@ -18,38 +18,38 @@ function subtotal(items) {
   return items.map(({ amount, unitPrice }) => amount * unitPrice).reduce((sum, i) => sum + i, 0);
 }
 
-// const rows = [
-//   createRow('Paperclips (Box)', 100, 1.15),
-//   createRow('Paper (Case)', 10, 45.99),
-//   createRow('Waste Basket', 2, 17.99),
-// ];
-
-
-
 export default function OrderDetail(props) {
 	const [orderDetail, setOrderDetail] = React.useState({})
 	const [loading, setLoading] = React.useState(false)
     React.useEffect(function() {
-        axions.get("/order/detail")
+        axions.get("/order/detail", {params:{orderId: props.orderId}})
             .then(({data}) => {
-				if (data) {setOrderDetail(data.order); setLoading(true)}})
-			.catch(e => console.log(e))
-    }, [1])
+				        if (data) {setOrderDetail(data.orderDetail); setLoading(true)}})
+			  .catch((e) => console.log(e))
+    }, [props.selected])
   function handleClick(event) {
         const type = event.target.id.match(/[a-zA-Z]+/)[0]; // Matches alphabetic characters
         const row = event.target.id.match(/\d+/)[0];
+        console.log(type,row)
         if (props.mode === 'editable') {
-            props.setSelectedTriger({type, row})
+            props.setSelectedTriger({
+              type, 
+              row: Number(row),
+              productName: orderDetail.requiredProducts[row].productName, 
+              orderId: Number(props.orderId),
+              value: type === 'description'? orderDetail.description: Number(orderDetail.requiredProducts[row].amount)
+            })
         }
     }
 	let invoiceSubtotal 
 	// let invoiceTaxes
 	let invoiceTotal 
 	if (loading) {
-		invoiceSubtotal = subtotal(orderDetail.materials);
+		invoiceSubtotal = subtotal(orderDetail.requiredProducts);
 	// 	invoiceTaxes = TAX_RATE * invoiceSubtotal;
 		invoiceTotal = invoiceSubtotal;
 	}
+  console.log(orderDetail.requiredProducts)
   return (
     <Paper style={{}}>
     {loading && <TableContainer component={Paper} >
@@ -68,9 +68,9 @@ export default function OrderDetail(props) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {orderDetail.materials.map((row, index) => (
-            <TableRow key={row.material}>
-              <TableCell>{row.material}</TableCell>
+          {orderDetail.requiredProducts.map((row, index) => (
+            <TableRow key={row.productId}>
+              <TableCell>{row.productName}</TableCell>
               <TableCell align="right" id={'amount' + String(index)} onDoubleClick={handleClick}>{row.amount}</TableCell>
               <TableCell align="right">{row.unitPrice}</TableCell>
               <TableCell align="right">{ccyFormat(row.unitPrice * row.amount)}</TableCell>
@@ -97,7 +97,7 @@ export default function OrderDetail(props) {
     </TableContainer>}
       <Paper style={{backgroundColor:'rgba(247,247,248)', padding:5, paddingLeft:20 ,marginTop:20}}>
         <h2>备注</h2>
-        <p >{orderDetail.description}</p>
+        <p  id='description0' onDoubleClick={handleClick}>{orderDetail.description}</p>
       </Paper>
     </Paper>
   );

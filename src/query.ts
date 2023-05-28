@@ -19,25 +19,30 @@ CREATE TABLE users (
 );
 CREATE TABLE products (
   ID INT PRIMARY KEY,
-  category varchar(255),
-  name VARCHAR(255),
-  description VARCHAR(255)
+  productName VARCHAR(255) UNIQUE,
+  description VARCHAR(255),
+  unitPrice INT,
+  unit VARCHAR(255),
+  remaining INT,
+  materials JSON
 );
 CREATE TABLE orders (
   ID INT PRIMARY KEY,
   time date,
-  deadlingTime date,
+  deadlineTime date,
   description VARCHAR(255),
-  material JSON,
+  products JSON,
   creatorID INT,
-  productID INT,
-  FOREIGN KEY (creatorID) REFERENCES users(ID),
-  FOREIGN KEY (productID) REFERENCES products(ID)  
+  client VARCHAR(255),
+  status VARCHAR(255),
+  FOREIGN KEY (creatorID) REFERENCES users(ID)
 );
 CREATE TABLE store (
   materialName VARCHAR(255) PRIMARY KEY,
   consuming INT,
   remaining INT,
+  unit VARCHAR(255),
+  unitPrice INT,
   time date
 );
 CREATE TABLE record (

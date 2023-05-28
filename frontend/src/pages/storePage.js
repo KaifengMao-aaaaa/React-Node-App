@@ -6,7 +6,6 @@ import AddMateriaType from '../components/store/addType';
 export default function StorePage() {
     const [openPage, setopenPage] = React.useState(null)
     const [updateTable, setUpdateTable] = useState(0)
-    console.log(updateTable)
     return (
         <Box sx={{}}>
             <Card style={{marginTop:100,marginLeft:100, width: 1000, padding: 20, backgroundColor: 'rgba(247,247,248)'}}>

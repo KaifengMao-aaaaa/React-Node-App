@@ -1,27 +1,14 @@
 import express, { json } from 'express'
-import { userRegister } from '../wrapfunctions/register';
-import login from '../wrapfunctions/login';
+import { userRegister, login, userListAll } from '../wrapfunctions/user';
 const router = express.Router()
 
-router.get("/listall", (req, res) => {
-  res.json({users:[
-    {
-      name: 'peopl1',
-      id: 1
-    },{
-      name: 'people2',
-      id: 2
-    },{
-      name: 'people3',
-      id: 3
-    },{
-      name: 'people4',
-      id: 5
-    },{
-      name: 'people5',
-      id: 9
-    }
-  ]});
+router.get("/listall",async (req, res, next) => {
+  try {
+    res.json(await userListAll())
+  } catch(e) {
+    console.log(e)
+    next(e)
+  }
 });
 router.get("/login",async (req,res,next) => {
     console.log(req.query)

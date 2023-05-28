@@ -14,13 +14,18 @@ import ProductDetailPage from './pages/productDetailPage';
 import UserPage from './pages/userPage';
 import Test from './components/test';
 function App() {
-  
+
+  function setAuth(uId) {
+    localStorage.setItem('uId', uId);
+
+  }
+
   return (
     <BrowserRouter>
       <Routes>
         <Route path= '/test' element = {<Test/>} />
-        <Route exact path='/user/login' element = {<LoginPage />}/>
-        <Route exact path='/user/register' element = {<SignUp />}/>
+        <Route exact path='/user/login' element = {<LoginPage saveId = {setAuth}/>} />
+        <Route exact path='/user/register' element = {<SignUp saveId = {setAuth}/>} />
         <Route element = {<SideBar/>}>
           <Route path= '/' element = {<HomePage/>} />
           <Route path= '/order' element = {<OrderPage/>} />

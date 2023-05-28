@@ -8,11 +8,11 @@ const EDIT = 'editable'
 export default function ProductDetailPage() {
     const [selected, setSelected] = React.useState(null)
     const [mode, setMode] = React.useState(null)
-    console.log(selected)
+    const { productId } = useParams();
     return (<Box sx={{margin:15,marginLeft:20, width: 900}}>
-        <ProductDetail selectedTriger = {setSelected} mode = {mode}/>
+        <ProductDetail selectedTriger = {setSelected} productId = {productId} mode = {mode} selected={selected}/>
             {mode !== EDIT && <Button width='30' variant="contained" onClick={() => setMode(EDIT)}>修改 </Button>}
-            {mode === EDIT && <EditProductDetail selected = {selected} closeModeTriger = {setMode}/>}
+            {mode === EDIT && <EditProductDetail selected = {selected} closeModeTriger = {setMode} selectedTriger = {setSelected}/>}
     </Box>
     )
 }

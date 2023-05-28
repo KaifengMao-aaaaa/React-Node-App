@@ -7,39 +7,38 @@ import axions from 'axios'
 import '../../index.css'
 import { Button } from '@mui/material';
 const columns = [
-    {field: 'id', headerName: 'ID'},
-    { field: 'startDate', headerName: '创建日期'},
-    { field: 'deadline', headerName: '截至日期'},
-    { field: 'client', headerName: '客户'},
+    {field: 'id', headerName: 'ID', type: 'number'},
+    { field: 'startDate', headerName: '创建日期', type: 'text'},
+    { field: 'deadline', headerName: '截至日期', type: 'text'},
+    { field: 'client', headerName: '客户', type: 'text'},
     {
         field: 'userName',
-        headerName: '用户'
+        headerName: '用户',
+        type: 'text'
     },
     {
         field: 'status',
         headerName: '状态',
+        type: 'text'
     },
-    {
-        field: 'amount',
-        headerName: '数量',
-        type: 'number'
-    },
-    {
-        field: 'unitPrice',
-        headerName: '单价',
-        type: 'number'
-    },
-    {
-        headerName:'总价',
-        type: 'number',
-        valueGetter: (params) =>
-        params.row.unitPrice * params.row.amount
-    },
+
+    // {
+    //     field: 'unitPrice',
+    //     headerName: '单价',
+    //     type: 'number'
+    // },
+    // {
+    //     field: 'totalPrice',
+    //     headerName:'总价',
+    //     type: 'number',
+    //     valueGetter: (params) =>
+    //     params.row.unitPrice * params.row.amount
+    // },
     {
         field: 'link',
         headerName :'物料',
         renderCell: (params) => {
-            return (<Button variant='contained' href={'/order/' + String(params.row.id)}>
+            return (<Button variant='contained' href={'/order/' + String(params.row.orderId)}>
                 查看
             </Button>)
         }
@@ -51,17 +50,17 @@ export default function ListOrders(props) {
 
     const [orderList,setOrderList] = useState([])
     const [loadCreatePage, setLoadCreatePage] = useState(false)
-
     useEffect(function() {
         axions.get('/order/listAll')
-            .then(({data}) => {setOrderList(data)})
-    }, [loadCreatePage])
+            .then(({data}) => {setOrderList(data.ordersList)})
+    }, [loadCreatePage, props.selected])
   return (
       <Box sx={{ display: 'flex' }}>
         <Paper className='traditionPaper' style={{backgroundColor:'rgba(247,247,248)'}}>
                 <Grid item xs={12} >
                         <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
                         <DataGrid
+                            key={orderList.id}
                             rows={orderList}
                             columns={columns}
                             initialState={{
@@ -75,7 +74,8 @@ export default function ListOrders(props) {
                                     props.selectedTriger({
                                         id: event.id,
                                         field: event.field,
-                                        value: orderList.find((order) => order.id === event.id)[event.field]
+                                        value: orderList.find((order) => order.id === event.id)[event.field],
+                                        orderId: orderList.find((order) => order.id === event.id).orderId
                                     })
                                 }
                             }}

@@ -6,19 +6,22 @@ const initState = {
     unitPrice: 0,
     productName: 'yyyy/mm/dd',
     materials: [],
+    productName: '',
+    unit: ''
 }
 export default function AddProduct(props) {
     const [productImformation, setProductImformation] = React.useState(initState);
     const [materialType, setMaterialType] = React.useState([])
     const [loading, setLoading] = React.useState(false)
     React.useEffect(function() {
-        axions.get('/material/type')
-            .then(({data}) => {if (data) {setMaterialType(data.materialsType); setLoading(true)}})
+        axions.get('/store/allType')
+            .then(({data}) => {if (data) {setMaterialType(data.allMaterialType); setLoading(true)}})
             .catch((e) => console.log(e))
     }, [])
     
     const handleAnyChange = event => {
     let newProduct
+    console.log(event.target)
     if (event.target.name.startsWith('materialAmount')) {
         const index = event.target.name.match(/\d+$/)[0]
         newProduct = {...productImformation}
@@ -26,7 +29,7 @@ export default function AddProduct(props) {
     } else if (event.target.name.startsWith('materialName')) {
         const index = event.target.name.match(/\d+$/)[0]
         newProduct = {...productImformation}
-        newProduct.materials[index].material = event.target.value
+        newProduct.materials[index].materialName = event.target.value
     } else if (event.target.name === 'unitPrice') {
         newProduct = {
             ...productImformation,
@@ -38,6 +41,16 @@ export default function AddProduct(props) {
             ...productImformation,
             description: event.target.value
         } 
+    } else if (event.target.name === 'productName'){
+        newProduct = {
+            ...productImformation,
+            productName: event.target.value
+        }
+    } else if (event.target.name === 'unit'){
+        newProduct = {
+            ...productImformation,
+            unit: event.target.value
+        }
     } 
     setProductImformation(newProduct)
     };
@@ -47,7 +60,7 @@ export default function AddProduct(props) {
         const newProduct = {...productImformation}
         newProduct.materials.push({
             amount: 0,
-            material: '',
+            materialName: '',
         })
         setProductImformation(newProduct)
         };  
@@ -67,14 +80,23 @@ export default function AddProduct(props) {
                     label = '产品名字'
                     variant='standard'
                     style={{marginRight: 20, marginLeft:5}}
-                    name='prodctName'
+                    name='productName'
                     onChange={handleAnyChange}
                 />
                 <TextField
                     label = '单价'
                     variant='standard'
+                    type='number'
                     name='unitPrice'
                     onChange={handleAnyChange}
+                />
+                <TextField
+                    label = '单位'
+                    variant='standard'
+                    name='unit'
+                    onChange={handleAnyChange}
+                    type='text'
+                    style={{marginLeft:15}}
                 />
                 <br/>
                 <TextField
@@ -103,7 +125,7 @@ export default function AddProduct(props) {
                                 name={'materialName' + index}
                             >
                                 {materialType.map((option, index) => (
-                                <MenuItem  key={index} value={option.material} >{option.material + '   [' + option.unit + ']'}</MenuItem>
+                                <MenuItem  key={index} value={option.materialName} >{option.materialName + '   [' + option.unit + ']'}</MenuItem>
                                 ))}
                             </Select>
                             <TextField id= {index} label={'数量'} onChange={handleAnyChange} name= {'materialAmount' + index}/>

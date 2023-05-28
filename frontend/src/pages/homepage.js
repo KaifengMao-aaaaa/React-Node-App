@@ -13,6 +13,8 @@ export default function Body() {
   // const [ordersList,setOrdersList] = useState([])
   const [ordersdetails,setOrdersDetails] = useState([])
   const [loadCreatePage, setLoadCreatePage] = useState(false)
+    const uId = localStorage.getItem('uId')
+    console.log(uId)
   useEffect(function() {
     console.log('run')
     axions.get('/orders/details')

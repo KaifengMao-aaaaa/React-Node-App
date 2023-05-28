@@ -33,13 +33,16 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export default function LoginPage(props) {
+    console.log(props)
     const history = useNavigate()
     const handleSubmit = (event) => {
       event.preventDefault();
       const data = new FormData(event.currentTarget);
       axions.get('/user/login', {params:{email: data.get('email'), password: data.get('password')}})
+      .then(({data}) => props.saveId(data.userId))
       .then(() => history('/'))
       .catch((e) => console.log(e))
+
       
   };
 

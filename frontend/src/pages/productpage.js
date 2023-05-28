@@ -12,9 +12,9 @@ export default function ProductPage() {
     return (
         <Box sx={{}}>
             {!loadAddPage && <Card style={{marginTop:100,marginLeft:100, width: 1000, padding: 20, backgroundColor: 'rgba(247,247,248)'}}>
-                <ProductTable mode = {mode} selectedTriger = {setSelected}/>
+                <ProductTable mode = {mode} selectedTriger = {setSelected} selected = {selected}/>
                 <div style={{display:'flex'}}>
-                    {mode && <EditProduct selected = {selected}/>}
+                    {mode && <EditProduct selected = {selected} updateSelected = {setSelected}/>}
                     {(mode&&!loadAddPage) && <Button onClick={() => {setMode(null); setSelected(null)}} style={{marginLeft:10}} variant='outlined'>关闭</Button>}
                 </div>
             </Card>}

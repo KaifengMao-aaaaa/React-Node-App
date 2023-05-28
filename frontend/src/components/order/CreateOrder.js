@@ -6,33 +6,29 @@ const initState = {
     description: '',
     client: '',
     deadline: 'yyyy/mm/dd',
-    materials: [],
-    selectedProduct: '' 
+    products: [],
+    unitPrice: 0 
 }
 export default function OrderCreate(props) {
     const [orderImformation, setOrderImformation] = React.useState(initState);
     const [productsType,setProductsType] = React.useState([])
-    const [materialsType,setMaterialsType] = React.useState([])
+    const uId = localStorage.getItem('uId')
+    console.log(uId)
     React.useEffect(function() {
         console.log('run')
-        axions.get('/product/type')
-            .then(({data}) => {setProductsType(data.productsType)})
-    }, [])
-    React.useEffect(function() {
-        console.log('run')
-        axions.get('/material/type')
-            .then(({data}) => {setMaterialsType(data.materialsType)})
+        axions.get('/product/allType')
+            .then(({data}) => {setProductsType(data.allProductType)})
     }, [])
     const handleAnyChange = event => {
     let newOrder
-    if (event.target.name.startsWith('materialAmount')) {
+    if (event.target.name.startsWith('productAmount')) {
         const index = event.target.name.match(/\d+$/)[0]
         newOrder = {...orderImformation}
-        newOrder.materials[index].amount = event.target.value
-    } else if (event.target.name.startsWith('materialName')) {
+        newOrder.products[index].amount = Number(event.target.value)
+    } else if (event.target.name.startsWith('productName')) {
         const index = event.target.name.match(/\d+$/)[0]
         newOrder = {...orderImformation}
-        newOrder.materials[index].material = event.target.value
+        newOrder.products[index].productName = event.target.value
     } else if (event.target.name === 'client') {
         newOrder = {
             ...orderImformation,
@@ -54,23 +50,29 @@ export default function OrderCreate(props) {
             ...orderImformation,
             selectedProduct: event.target.value
         }
-    }
+    } else if (event.target.name === 'unitPrice') {
+        newOrder = {
+            ...orderImformation,
+            unitPrice: Number(event.target.value)
+        }
+    } 
     setOrderImformation(newOrder)
     };
 
-    const materialCreate = (event) => {
-    event.preventDefault();
-    const newOrder = {...orderImformation}
-    newOrder.materials.push({
-        amount: 0,
-        material: '',
+    const productCreate = (event) => {
+        event.preventDefault();
+        const newOrder = {...orderImformation}
+        newOrder.products.push({
+            amount: 0,
+            productName: '',
     })
     setOrderImformation(newOrder)
     };  
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        axions.post('/order/create',orderImformation)
+        console.log('submit')
+        axions.post('/order/create',{...orderImformation, creatorId:Number(uId)})
             .then(setOrderImformation(initState))
             .then(window.location.reload())
             .catch((e) => console.log(e))
@@ -92,6 +94,13 @@ export default function OrderCreate(props) {
                     name='deadline'
                     onChange={handleAnyChange}
                 />
+                <TextField
+                    label = '单价'
+                    variant='standard'
+                    name='unitPrice'
+                    type='number'
+                    onChange={handleAnyChange}
+                />
                 <br/>
                 <TextField
                     label = '备注'
@@ -105,7 +114,7 @@ export default function OrderCreate(props) {
             </Card>
             <br></br>
             <Card   style={{marginTop:'auto',marginLeft:100, width: 800, padding: 20, backgroundColor: 'rgba(247,247,248)'}}>
-                <form >
+                {/* <form >
                     <FormControl variant="outlined" fullWidth>
                     <InputLabel>产品类型</InputLabel>
                     <Select
@@ -118,25 +127,25 @@ export default function OrderCreate(props) {
                         ))}
                     </Select>
                     </FormControl>
-                </form>
+                </form> */}
                     <div style={{ display: 'flex', alignItems: 'center' }}>
-                        <h2 style={{ marginRight: '10px' }}>物料</h2>
-                        <Button onClick={materialCreate} variant="contained" color="primary">添加物料需求</Button>
+                        <h2 style={{ marginRight: '10px' }}>产品</h2>
+                        <Button onClick={productCreate} variant="contained" color="primary">添加产品需求</Button>
                     </div>
-                    {orderImformation.materials.map((object, index) => 
+                    {orderImformation.products.map((object, index) => 
                         <FormControl variant="outlined" style={{width:150}}>
-                            <InputLabel>物料种类</InputLabel>
+                            <InputLabel>产品种类</InputLabel>
                             <Select
-                                value={orderImformation.materials[index].material}
+                                value={orderImformation.products[index].productName}
                                 onChange={handleAnyChange}
                                 label="Select an option"
-                                name={'materialName' + index}
+                                name={'productName' + index}
                             >
-                                {materialsType.map((option, index) => (
-                                <MenuItem key={index} value={option.material}>{option.material + '   [' + option.unit + ']'}</MenuItem>
+                                {productsType.map((option, index) => (
+                                <MenuItem key={index} value={option.productName}>{option.productName + '   [' + option.unit + ']'}</MenuItem>
                                 ))}
                             </Select>
-                            <TextField id= {index} label={'数量'} onChange={handleAnyChange} name= {'materialAmount' + index}/>
+                            <TextField id= {index} label={'数量'} onChange={handleAnyChange} name= {'productAmount' + index}/>
                         </FormControl>
                     )}
             </Card>

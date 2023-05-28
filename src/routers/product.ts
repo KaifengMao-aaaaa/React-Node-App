@@ -1,41 +1,90 @@
 import express from 'express'
-
+import {productCreate, productListAll, productEditDescription,productDetail, productAllType, productEditName, productEditUnit, productEditUnitPrice, productEditRemaining, productEditMaterialAmount} from './../wrapfunctions/product'
 const router = express.Router()
-router.get("/type", (req, res) => {
-  res.json({ productsType: ['good', 'bad', 'middle'] });
+router.get("/allType",async (req, res, next) => {
+  try {
+    res.json(await productAllType())
+  } catch(e) {
+    next(e)
+  }
 });
-router.get("/listAll", (req, res) => {
-  res.json({products: [{
-    id: 1,
-    product: 'good',
-    unitPrice: 100,
-    remaining: 12,
-    unit: 'kg'
-  }]});
+router.get("/listall", async (req, res, next) => {
+  try {
+    res.json(await productListAll());
+  } catch (e) {
+    next(e)
+  }
 });
-router.get("/detail", (req, res) => {
-  console.log('here')
-  res.json({product : {materials:[{id:10,amount:11,material:'routerles',unitPrice:100,totalPrice: 10000}],description: 'hhhhhhhhhh'} });
+router.get("/detail",async (req, res, next) => {
+  try {
+    res.json(await productDetail(Number(req.query.productId)))
+  } catch(e) {
+    next(e)
+  }
 });
-router.put("/editName", (req, res) => {
+router.put("/editName",async (req, res, next) => {
+  const {productId, productName} = req.body
+  try {
+    res.json(await productEditName(productId, productName))
+  } catch(e) {
+    next(e)
+  } 
   console.log(req.body)
 });
-router.put("/editUnit", (req, res) => {
-  console.log(req.body)
+router.put("/editUnit",async (req, res, next) => {
+  const {productId, unit} = req.body
+  try {
+    res.json(await productEditUnit(productId, unit))
+  } catch(e) {
+    console.log(e)
+    next(e)
+  }
 });
-router.put("/editUnitPrice", (req, res) => {
-  console.log(req.body)
+router.put("/editUnitPrice",async (req, res, next) => {
+  const {productId, unitPrice} = req.body
+  try {
+    res.json(await productEditUnitPrice(productId, unitPrice))
+  } catch(e) {
+    console.log(e)
+    next(e)
+  }
 });
-router.put("/editRemaining", (req, res) => {
-  console.log(req.body)
+router.put("/editRemaining",async (req, res, next) => {
+  const {productId, remaining} = req.body
+  try {
+    res.json(await productEditRemaining(productId, remaining))
+  } catch(e) {
+    console.log(e)
+    next(e)
+  }
 });
-router.put("/editMaterial", (req, res) => {
-  console.log(req.body)
+// router.put("/editMaterial", (req, res) => {
+//   console.log(req.body)
+// });
+router.put("/editMaterialAmount",async (req, res, next) => {
+  try {
+    const {amount, productId, row} = req.body
+    res.json(await productEditMaterialAmount(productId,amount, row))
+  } catch (e) {
+    console.log(e)
+    next(e)
+  }
 });
-router.put("/editMaterialAmout", (req, res) => {
-  console.log(req.body)
+router.put("/editDescription",async (req, res, next) => {
+  try {
+    const {description, productId} = req.body
+    res.json(await productEditDescription(productId, description))
+  } catch (e) {
+    console.log(e)
+    next(e)
+  }
 });
-router.post("/create", (req, res) => {
-  console.log(req.body)
+router.post("/create",async (req, res, next) => {
+  try {
+    const {productName, unit, unitPrice, description, materials} = req.body
+    await productCreate(productName, unit,unitPrice, description, materials)
+  } catch(e) {
+    next(e)
+  }
 });
 export default router

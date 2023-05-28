@@ -1,7 +1,7 @@
 import {insert, randomNumber, search,update} from './helpers'
 import createHttpError, { CreateHttpError } from 'http-errors'
-export async function storeAddType(materialName: string) {
-    await insert('store',['materialName','time','consuming', 'remaining'], [materialName, new Date(), 0, 0])
+export async function storeAddType(materialName: string, unit: string, unitPrice: number) {
+    await insert('store',['materialName','time','consuming', 'remaining','unit', 'unitPrice'], [materialName, new Date(), 0, 0, unit, unitPrice])
     return {}
 }
 
@@ -20,5 +20,5 @@ export async function storeListAll() {
 }
 
 export async function storeAllType() {
-   return await search('store',['materialName'],[],[]) 
+   return await search('store',['materialName', 'unit'],[],[]) 
 }

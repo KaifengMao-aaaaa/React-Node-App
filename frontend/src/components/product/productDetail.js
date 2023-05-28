@@ -25,16 +25,21 @@ export default function ProductDetail(props) {
 	const [productDetail, setOrderDetail] = React.useState({})
 	const [loading, setLoading] = React.useState(false)
     React.useEffect(function() {
-        axions.get("/product/detail")
+        axions.get("/product/detail", {params: {productId:props.productId}})
             .then(({data}) => {
-				if (data) {setOrderDetail(data.product); setLoading(true)}})
+				if (data) {setOrderDetail(data.productDetail); setLoading(true)}})
 			.catch(e => console.log(e))
-    }, [])
+    }, [props.selected])
+    // console.log(productDetail[0])
     function handleClick(event) {
         const type = event.target.id.match(/[a-zA-Z]+/)[0]; // Matches alphabetic characters
         const row = event.target.id.match(/\d+/)[0];
         if (props.mode === 'editable') {
-            props.selectedTriger({type, row})
+            props.selectedTriger({field:type, 
+              row, 
+              materialName: productDetail.materials[row].materialName, 
+              productId: props.productId, 
+              value: type!=='description' ?productDetail.materials[row][type] : productDetail.description})
         }
     }
 	let invoiceSubtotal 
@@ -50,7 +55,7 @@ export default function ProductDetail(props) {
 
     <Paper style={{}}>
     {loading && <TableContainer component={Paper} >
-      <Table sx={{ minWidth: 700 }} aria-label="spanning table">
+      <Table key={'id'} sx={{ minWidth: 700 }} aria-label="spanning table">
         <TableHead>
           <TableRow>
             <TableCell align="center" colSpan={4}>
@@ -66,10 +71,10 @@ export default function ProductDetail(props) {
         </TableHead>
         <TableBody>
           {productDetail.materials.map((row,index) => (
-            <TableRow key={row.material}>
-              <TableCell id={'material' + String(index)} onClick={handleClick}>{row.material}</TableCell>
-              <TableCell align="right" id={'amount' + String(index)} onClick={handleClick} >{row.amount}</TableCell>
-              <TableCell align="right" id={'unitPrice' + String(index)} onClick={handleClick}>{row.unitPrice}</TableCell>
+            <TableRow key={row.ID}>
+              <TableCell id={'material' + String(index)}>{row.materialName}</TableCell>
+              <TableCell align="right" id={'amount' + String(index)} onDoubleClick={handleClick} >{row.amount}</TableCell>
+              <TableCell align="right" id={'unitPrice' + String(index)} >{row.unitPrice}</TableCell>
               <TableCell align="right" >{ccyFormat(row.unitPrice * row.amount)}</TableCell>
             </TableRow>
           ))}
@@ -92,9 +97,9 @@ export default function ProductDetail(props) {
       </Table>
     </TableContainer>}
     </Paper>
-    <Paper style={{}}>
+    <Paper style={{padding: 10, marginTop: 30}}>
         <h2>备注</h2>
-        <p onClick={handleClick} id='description0'>{productDetail.description}</p>
+        <p onDoubleClick={handleClick} id='description0'>{productDetail.description}</p>
     </Paper>
     </Box>
   );
