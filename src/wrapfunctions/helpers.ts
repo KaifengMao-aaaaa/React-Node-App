@@ -2,7 +2,6 @@ import bcrypt from 'bcrypt';
 import crypto from 'crypto';
 import pool from "../database";
 export async function insert(table: string, params : string[], values: (any)[], JSONIndex ?: number[]) {
-    console.log(values)
     let insertValues = values
     if (JSONIndex) {
         insertValues = insertValues.map((value, index) => {
@@ -14,7 +13,6 @@ export async function insert(table: string, params : string[], values: (any)[], 
     }
     const fields = params.join(',')
     const placeholders = '?,'.repeat(params.length)
-    console.log(`INSERT INTO ${table} (${fields}) VALUES(${placeholders.slice(0,-1)});`)
     try {await pool.query(`INSERT INTO ${table} (${fields}) VALUES(${placeholders.slice(0,-1)});`, insertValues)}
     catch(e) {console.log(e)}
 }
@@ -31,34 +29,32 @@ export async function search(table: string,getFields: string[] ,conditionFields:
     const fields = getFields.join(',')
 
     const conditions = formatCoditions.length > 0 ? `WHERE ${formatCoditions.join(',')}` : ''
-    console.log(`SELECT ${fields} FROM ${table} ${conditions} `)
     const [results] = await pool.query(`SELECT ${fields} FROM ${table} ${conditions}`, conditionValues)
     return results
 }
 // useless function
-export async function joinSearch(table1: string, table2: string, table1GetFields: string[], table2GetFields: string[],repeatFields: string[] ,ON : string = '') {
-    console.log(repeatFields.includes('ID'))
-    const table1Selected = table1GetFields.map((field) =>{
-        if (repeatFields.includes(field)) {
-            return table1 + `.${field}`
-        }
-        return field
-    })
-    const table2Selected = table2GetFields.map((field) =>{
-        if (repeatFields.includes(field)) {
-            return table1 + `.${field}`
-        }
-        return field
-    })
-    const finalSelected = table1Selected.concat(table2Selected).join(',')
-    try {console.log(`SELECT ${finalSelected} FROM ${table1} JOIN ${table2} ${ON}`)
-        const [results] = await pool.query(`SELECT ${finalSelected} FROM ${table1} JOIN ${table2} ${ON}`) 
-        return results
-    } catch(e) {
-        console.log(e)
-    }
+// export async function joinSearch(table1: string, table2: string, table1GetFields: string[], table2GetFields: string[],repeatFields: string[] ,ON : string = '') {
+//     const table1Selected = table1GetFields.map((field) =>{
+//         if (repeatFields.includes(field)) {
+//             return table1 + `.${field}`
+//         }
+//         return field
+//     })
+//     const table2Selected = table2GetFields.map((field) =>{
+//         if (repeatFields.includes(field)) {
+//             return table1 + `.${field}`
+//         }
+//         return field
+//     })
+//     const finalSelected = table1Selected.concat(table2Selected).join(',')
+//     try {console.log(`SELECT ${finalSelected} FROM ${table1} JOIN ${table2} ${ON}`)
+//         const [results] = await pool.query(`SELECT ${finalSelected} FROM ${table1} JOIN ${table2} ${ON}`) 
+//         return results
+//     } catch(e) {
+//         console.log(e)
+//     }
 
-}
+// }
 export async function checkPassword(hash: string, password: string): Promise<boolean> {
     if (bcrypt.compare(hash, password)) {
         return true

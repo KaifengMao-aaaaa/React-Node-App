@@ -14,6 +14,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import {useNavigate} from "react-router-dom"
+import AuthContext from '../AuthContext'
 import axions from 'axios'
 function Copyright(props) {
   return (
@@ -33,7 +34,6 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export default function LoginPage(props) {
-    console.log(props)
     const history = useNavigate()
     const handleSubmit = (event) => {
       event.preventDefault();

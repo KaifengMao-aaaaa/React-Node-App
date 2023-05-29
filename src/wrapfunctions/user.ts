@@ -12,7 +12,6 @@ export async function userRegister(name: string, email: string, password:string)
     } catch(e) {
         throw createHttpError(403, 'insertFailed')
     }
-    console.log(userId)
     return {userId}
 
 }
@@ -30,6 +29,5 @@ export async function login (email: string, password: string) {
 }
 export async function userListAll() {
     const results = await search('users', ['name','ROW_NUMBER() OVER (ORDER BY ID) AS id'],[],[])
-    console.log(results)
     return {users: results}
 }

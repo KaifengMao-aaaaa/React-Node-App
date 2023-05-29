@@ -9,7 +9,6 @@ export async function productCreate(productName: string, unit: string, unitPrice
 }
 export async function productListAll() {
   const results = await search('products', ['ROW_NUMBER() OVER (ORDER BY ID) AS id','ID as productId','productName', 'unitPrice', 'remaining', 'unit'],[], [])
-  console.log(results)
   return {
     productsList: results
   }
@@ -24,7 +23,6 @@ export async function productDetail(productId: number) {
     const materials = results[0].materials
     let index = 0;
     for (const material of materials) {
-      console.log(material.materialName)
       const price = await search('store', ['unitPrice'], ['materialName'], [material.materialName]);
 
       materials[index].unitPrice = price[0].unitPrice
@@ -84,7 +82,6 @@ export async function productEditRemaining(productId: number, newRemaining: numb
 
 export async function productEditMaterialAmount(productId: number, newMaterialAmount: number, row: number) {
   try {
-    console.log(productId, newMaterialAmount, row)
     await directQuery(`UPDATE products
       SET materials = JSON_REPLACE(materials, '$[?].amount', ?)
       where ID = ? ;`, [row,newMaterialAmount,productId])

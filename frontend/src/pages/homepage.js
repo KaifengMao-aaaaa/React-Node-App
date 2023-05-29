@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
+import AuthContext from '../AuthContext';
 import Toolbar from '@mui/material/Toolbar';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
@@ -11,10 +12,10 @@ import Copyright from '../components/Layout/Copyright';
 import axions from 'axios'
 export default function Body() {
   // const [ordersList,setOrdersList] = useState([])
+  const token = React.useContext(AuthContext);
+  console.log(token)
   const [ordersdetails,setOrdersDetails] = useState([])
   const [loadCreatePage, setLoadCreatePage] = useState(false)
-    const uId = localStorage.getItem('uId')
-    console.log(uId)
   useEffect(function() {
     console.log('run')
     axions.get('/orders/details')
