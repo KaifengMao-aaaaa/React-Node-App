@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import { Box,Paper,TableRow, TableHead, TableContainer, TableCell, TableBody, Table } from '@mui/material';
 import '../../index.css'
-import axions from 'axios'
+import {makeRequest} from '../../utils/requestWrapper'
 const TAX_RATE = 0.07;
 
 function ccyFormat(num) {
@@ -25,7 +25,8 @@ export default function ProductDetail(props) {
 	const [productDetail, setOrderDetail] = React.useState({})
 	const [loading, setLoading] = React.useState(false)
     React.useEffect(function() {
-        axions.get("/product/detail", {params: {productId:props.productId}})
+        makeRequest('GET','PRODUCT_DETAIL',{productId:props.productId} )
+        // axions.get("/product/detail", {params: {productId:props.productId}})
             .then(({data}) => {
 				if (data) {setOrderDetail(data.productDetail); setLoading(true)}})
 			.catch(e => console.log(e))

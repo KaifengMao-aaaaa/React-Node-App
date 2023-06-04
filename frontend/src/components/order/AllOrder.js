@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import { DataGrid } from '@mui/x-data-grid';
-import axions from 'axios'
+import {makeRequest} from '../../utils/requestWrapper'
 import '../../index.css'
 import { Button } from '@mui/material';
 const columns = [
@@ -51,7 +51,7 @@ export default function ListOrders(props) {
     const [orderList,setOrderList] = useState([])
     const [loadCreatePage, setLoadCreatePage] = useState(false)
     useEffect(function() {
-        axions.get('/order/listAll')
+        makeRequest('GET', 'ORDER_LISTALL')
             .then(({data}) => {setOrderList(data.ordersList)})
     }, [loadCreatePage, props.selected])
   return (

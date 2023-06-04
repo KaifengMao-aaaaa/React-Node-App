@@ -23,7 +23,7 @@ function App() {
   }
 
   return (
-    <AuthProvider value={uId}>
+    <AuthProvider value={[uId, setUId]}>
       <BrowserRouter>
         <Routes>
           <Route exact path='/user/login' element = {<LoginPage saveId = {setAuth}/>} />

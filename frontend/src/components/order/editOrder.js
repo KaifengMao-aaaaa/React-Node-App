@@ -1,10 +1,10 @@
 import { Paper, TextField, Button, Select, MenuItem } from "@mui/material"
 import React from "react"
-import axions from 'axios'
+import {makeRequest} from '../../utils/requestWrapper'
 const paths = {
-    startDate: '/order/editStartDate', deadline: '/order/editDeadline',
-    client: 'order/editClient', status: 'order/editStatus', unitPrice: 'order/editUnitPrice',
-    amount: 'order/editAmout'
+    startDate: 'ORDER_EDITSTARTDATE', deadline: 'ORDER_EDITDEADLINE',
+    client: 'ORDER_EDITCLIENT', status: 'ORDER_EDITSTATUS', unitPrice: 'ORDER_UNITPRICE',
+    amount: 'ORDER_EDITAMOUNT'
 }
 
 const statusItems = ['完成','未完成']
@@ -16,14 +16,15 @@ export default function EditOrder(props) {
     function editValue(event) {
         
         if (props.selected && props.selected.field in paths) {
-            axions.put(paths[props.selected.field], {[props.selected.field]:text, orderId: props.selected.orderId}) 
+            makeRequest('PUT', paths[props.selected.field], {[props.selected.field]:text, orderId: props.selected.orderId})
+            // axions.put(paths[props.selected.field], {[props.selected.field]:text, orderId: props.selected.orderId}) 
                 .then(props.selectedTriger(null))
                .catch((e)=> console.log(e))
         }
     }
     
     return (<Paper style={{display:"flex", marginLeft:60, marginTop:20}}>
-            <TextField onChange={handleChnage} variant="outlined" label= {props.selected && props.selected.value} placeholder={props.selected && String(props.selected.value)}></TextField> 
+            {props.selected && props.selected.field !== 'status' && <TextField onChange={handleChnage} variant="outlined" label= {props.selected && props.selected.value} placeholder={props.selected && String(props.selected.value)}></TextField>} 
             {props.selected && props.selected.field === 'status' && <Select>
                 {statusItems.map((status) => <MenuItem onClick={(event) => setText(event.target.type)} type={status} >{status}</MenuItem>)}
             </Select>}

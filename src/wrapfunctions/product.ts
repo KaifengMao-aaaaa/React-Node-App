@@ -16,7 +16,7 @@ export async function productListAll() {
 }
 
 export async function productDetail(productId: number) {
-  const result = await search('products', ['materials', 'unitPrice', 'description', 'remaining as amount'], ['ID'], [productId])
+    const result = await search('products', ['materials', 'unitPrice', 'description', 'remaining as amount'], ['ID'], [productId])
     const results = await directQuery(`SELECT materials 
       FROM products
       WHERE ID = ?`, [productId] )
@@ -24,17 +24,16 @@ export async function productDetail(productId: number) {
     let index = 0;
     for (const material of materials) {
       const price = await search('store', ['unitPrice'], ['materialName'], [material.materialName]);
-
       materials[index].unitPrice = price[0].unitPrice
       materials[index].ID = index + 1
 
       index++; 
     }
-  result[0].materials = materials
-  if (result[0].description === '') {
-    result[0].description = '无'
-  }
-  return {productDetail: result[0]}
+    result[0].materials = materials
+    if (result[0].description === '') {
+      result[0].description = '无'
+    }
+    return {productDetail: result[0]}
 }
 
 export async function productAllType() {

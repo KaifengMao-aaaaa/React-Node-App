@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { TextField, Button, FormControl, InputLabel, Select, orderImformation, MenuItem} from '@mui/material';
-import axions from 'axios'
+import {makeRequest} from '../../utils/requestWrapper'
 const AddMaterial = (props) => {
     const [amount, setAmount] = useState('');
     const [materialsOptions, setmaterialOptions] = useState([])
@@ -10,14 +10,14 @@ const AddMaterial = (props) => {
     };
     const handleSubmit = (event) => {
         event.preventDefault();
-        axions.post('/store/add',{amount: amount, materialName: selectedMaterial})
+        makeRequest('POST', 'STORE_ADD', {amount: amount, materialName: selectedMaterial})
             .catch((e) => console.log(e))
         setAmount('');
         setSelectedMaterial(null)
         props.updateTableTriger((prev) => prev + 1)
     };
     React.useEffect(function() {
-        axions.get('/store/alltype')
+        makeRequest('GET', 'STORE_ALLTYPE', {})
             .then(({data}) => {setmaterialOptions(data.allMaterialType)})
     }, [])
 

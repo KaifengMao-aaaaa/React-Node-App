@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { DataGrid } from '@mui/x-data-grid';
-import axions from 'axios'
+import {makeRequest} from '../../utils/requestWrapper'
 import { Button } from '@mui/material';
 const columns = [
     {field: 'id'},
@@ -33,7 +33,7 @@ export default function ProductTable(props) {
     const [loading, setLoading] = React.useState(false)
 
     React.useEffect(function() {
-        axions.get('/product/listall')
+        makeRequest('GET', 'PRODUCT_LISTALL')
             .then(({data}) => {
                 if (data) {
 

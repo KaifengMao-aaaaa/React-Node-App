@@ -1,5 +1,5 @@
 import React from "react"
-import axios from "axios"
+import {makeRequest} from '../../utils/requestWrapper'
 import { Box, Button, TextField } from "@mui/material"
 export default function  AddMateriaType(props) {
     const [data, setdata] = React.useState({
@@ -8,7 +8,7 @@ export default function  AddMateriaType(props) {
         unit: ''
     })
     function handleSubmit() {
-        axios.post('/store/addType', data)
+        makeRequest('POST', 'STORE_ADDTYPE', data)
         .catch((e) => console.log(e))
         .finally( () => {
             props.closePageTriger(null)

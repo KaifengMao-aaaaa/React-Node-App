@@ -16,6 +16,7 @@ export default function EditOrder(props) {
     function editValue(event) {
         
         if (props.selected.field in paths) {
+            console.log(props.selected)
             axions.put(paths[props.selected.field], {[props.selected.field]:text}) 
                .catch((e)=> console.log(e))
         }

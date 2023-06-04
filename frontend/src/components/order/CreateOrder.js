@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Card, FormControl, InputLabel, Select, MenuItem, Button, TextField, Box } from '@mui/material';
-import axions from 'axios'
+import {makeRequest} from '../../utils/requestWrapper'
 import '../../index.css'
 const initState = {
     description: '',
@@ -15,8 +15,7 @@ export default function OrderCreate(props) {
     const uId = localStorage.getItem('uId')
     console.log(uId)
     React.useEffect(function() {
-        console.log('run')
-        axions.get('/product/allType')
+        makeRequest('GET', 'PRODUCT_ALLTYPE')
             .then(({data}) => {setProductsType(data.allProductType)})
     }, [])
     const handleAnyChange = event => {
@@ -72,7 +71,7 @@ export default function OrderCreate(props) {
     const handleSubmit = (event) => {
         event.preventDefault();
         console.log('submit')
-        axions.post('/order/create',{...orderImformation, creatorId:Number(uId)})
+        makeRequest('POST', 'ORDER_CREATE', {...orderImformation, creatorId:Number(uId)})
             .then(setOrderImformation(initState))
             .then(window.location.reload())
             .catch((e) => console.log(e))

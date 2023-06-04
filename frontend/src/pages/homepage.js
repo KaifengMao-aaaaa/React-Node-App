@@ -12,16 +12,13 @@ import Copyright from '../components/Layout/Copyright';
 import axions from 'axios'
 export default function Body() {
   // const [ordersList,setOrdersList] = useState([])
-  const token = React.useContext(AuthContext);
-  console.log(token)
+  const [token, setToken] = React.useContext(AuthContext);
   const [ordersdetails,setOrdersDetails] = useState([])
   const [loadCreatePage, setLoadCreatePage] = useState(false)
   useEffect(function() {
-    console.log('run')
     axions.get('/orders/details')
       .then(({data}) => {setOrdersDetails(data.orders)})
   }, [loadCreatePage])
-  console.log(loadCreatePage)
   return (
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />

@@ -1,7 +1,7 @@
 
 import * as React from 'react';
 import { DataGrid } from '@mui/x-data-grid';
-import axions from 'axios'
+import {makeRequest} from '../../utils/requestWrapper'
 const columns = [
     {field: 'id', headerName: 'ID'},
   { field: 'materialName', headerName: '物料', type:'text'},
@@ -23,7 +23,7 @@ const columns = [
 export default function DataTable(props) {
     const [storeDate, setStroeData] = React.useState([])
     React.useEffect(function() {
-        axions.get('/store/listall')
+      makeRequest('GET', 'STORE_LISTALL', {})
             .then(({data}) => {
               const newData = data.storeList.map((data, index) => {
                 return {

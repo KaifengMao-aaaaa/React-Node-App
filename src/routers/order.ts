@@ -1,6 +1,6 @@
 import express from 'express'
 import {} from '../query'
-import { orderCreate, orderListAll, orderDetail, orderEditStatus, orderEditDeadline, orderEditClient, editProductAmout } from '../wrapfunctions/order';
+import {editOrderDescription, orderCreate, orderListAll, orderDetail, orderEditStatus, orderEditDeadline, orderEditClient, editProductAmout } from '../wrapfunctions/order';
 // const express = require('express')
 
 const router = express.Router()
@@ -65,6 +65,14 @@ router.put("/editProductAmount",async (req, res, next) => {
 });
 router.put("/editStartDate", (req, res) => {
   console.log(req.body)
+});
+router.put("/editDescription",async (req, res, next) => {
+  const {orderId, description} = req.body
+  try {
+    res.json(await editOrderDescription(orderId, description))
+  } catch(e) {
+    next(e)
+  }
 });
 router.post("/create",  async (req, res, next) => {
   console.log('here create')

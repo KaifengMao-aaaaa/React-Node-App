@@ -1,9 +1,9 @@
 import { Button, Box, TextField } from "@mui/material"
 import React from "react"
-import axions from "axios"
+import { makeRequest } from "../../utils/requestWrapper"
 const Paths = {
-    'amount' : '/order/editProductAmount',
-    'description': 'order/editDescription'
+    'amount' : 'ORDER_EDITPRODUCTAMOUNT',
+    'description': 'ORDER_EDITDESCRIPTION'
 }
 export default function EditOrderDetail(props) {
     const [text, setText] = React.useState('')
@@ -13,7 +13,7 @@ export default function EditOrderDetail(props) {
         if (['amount'].includes(props.selected.type)) {
             value = Number(text)
         }
-        axions.put(Paths[props.selected.type], {[
+        makeRequest('PUT', Paths[props.selected.type], {[
             props.selected.type]: value, orderId:props.orderId, 
             productName: props.selected.productName, 
             row: props.selected.row})

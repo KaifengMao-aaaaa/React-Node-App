@@ -19,6 +19,7 @@ router.get("/detail",async (req, res, next) => {
   try {
     res.json(await productDetail(Number(req.query.productId)))
   } catch(e) {
+    console.log(e)
     next(e)
   }
 });

@@ -1,12 +1,11 @@
 import * as React from 'react';
 import { Card, FormControl, InputLabel, Select, MenuItem, Button, TextField, Box } from '@mui/material';
-import axions from 'axios'
+import {makeRequest} from '../../utils/requestWrapper'
 const initState = {
     description: '',
     unitPrice: 0,
-    productName: 'yyyy/mm/dd',
-    materials: [],
     productName: '',
+    materials: [],
     unit: ''
 }
 export default function AddProduct(props) {
@@ -14,7 +13,7 @@ export default function AddProduct(props) {
     const [materialType, setMaterialType] = React.useState([])
     const [loading, setLoading] = React.useState(false)
     React.useEffect(function() {
-        axions.get('/store/allType')
+        makeRequest('GET', 'STORE_ALLTYPE',{})
             .then(({data}) => {if (data) {setMaterialType(data.allMaterialType); setLoading(true)}})
             .catch((e) => console.log(e))
     }, [])
@@ -67,10 +66,15 @@ export default function AddProduct(props) {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        axions.post('/product/create',productImformation)
-            .then(setProductImformation(initState))
-            .then(window.location.reload())
-            .catch((e) => console.log(e))
+        console.log(productImformation)
+        if (!productImformation.materials.find((material) => material.materialName === '')
+        && productImformation.unitPrice !== 0 && productImformation.productName !== ''
+        ) {
+            makeRequest('POST', 'PRODUCT_CREATE',productImformation)
+                .then(setProductImformation(initState))
+                .then(window.location.reload())
+                .catch((e) => console.log(e))
+        }
     };
     return (
         <Box> 

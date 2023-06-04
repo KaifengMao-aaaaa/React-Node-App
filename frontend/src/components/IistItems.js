@@ -10,9 +10,11 @@ import BarChartIcon from '@mui/icons-material/BarChart';
 import LayersIcon from '@mui/icons-material/Layers';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import { Button, Drawer, TextField } from '@mui/material';
+import AuthContext from '../AuthContext';
 export const MainListItems = () => {
   const [drawerOpen, setDrawerOpen] = React.useState(false);
   const [name, setName] = React.useState('');
+  const [uId, setUId] = React.useContext(AuthContext)
 
   const toggleDrawer = () => {
     setDrawerOpen(!drawerOpen);
@@ -65,7 +67,10 @@ export const MainListItems = () => {
       <ListItemText primary="用户" />
     </ListItemButton>
 
-    <ListItemButton href='/user/login'>
+    <ListItemButton onClick={() => {
+      localStorage.removeItem('uId')
+      setUId(null)
+    }}>
       <ListItemIcon>
         <LayersIcon />
       </ListItemIcon>

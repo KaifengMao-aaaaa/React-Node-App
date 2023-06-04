@@ -7,7 +7,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import '../../index.css'
-import axions from 'axios'
+import { makeRequest } from '../../utils/requestWrapper';
 const TAX_RATE = 0.07;
 
 function ccyFormat(num) {
@@ -22,7 +22,7 @@ export default function OrderDetail(props) {
 	const [orderDetail, setOrderDetail] = React.useState({})
 	const [loading, setLoading] = React.useState(false)
     React.useEffect(function() {
-        axions.get("/order/detail", {params:{orderId: props.orderId}})
+        makeRequest('GET', 'ORDER_DETAIL', {orderId: props.orderId})
             .then(({data}) => {
 				        if (data) {setOrderDetail(data.orderDetail); setLoading(true)}})
 			  .catch((e) => console.log(e))
@@ -35,7 +35,7 @@ export default function OrderDetail(props) {
             props.setSelectedTriger({
               type, 
               row: Number(row),
-              productName: orderDetail.requiredProducts[row].productName, 
+              productName: type === 'description'? null: orderDetail.requiredProducts[row].productName, 
               orderId: Number(props.orderId),
               value: type === 'description'? orderDetail.description: Number(orderDetail.requiredProducts[row].amount)
             })

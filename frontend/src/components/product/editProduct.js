@@ -1,11 +1,11 @@
 import { Button, Paper, TextField } from "@mui/material";
+import {makeRequest} from '../../utils/requestWrapper'
 import React from "react";
-import axions from 'axios'
 const paths = {
-    productName: '/product/editName', 
-    unit: '/product/editUnit',
-    remaining: '/product/editRemaining', 
-    unitPrice: '/product/editUnitPrice'
+    productName: 'PRODUCT_EDITNAME', 
+    unit: 'PRODUCT_EDITUNIT',
+    remaining: 'PRODUCT_EDITREMAINING', 
+    unitPrice: 'PRODUCT_EDITUNITPRICE'
 }
 
 export default function EditProduct(props) {
@@ -13,7 +13,7 @@ export default function EditProduct(props) {
     function editValue(event) {
         event.preventDefault();
         if (props.selected && props.selected.field in paths) {
-            axions.put(paths[props.selected.field], {[props.selected.field]: text, productId: props.selected.productId})
+            makeRequest('PUT',paths[props.selected.field], {[props.selected.field]: text, productId: props.selected.productId} )
                 .then(props.updateSelected(null))
                 .catch((e)=> console.log(e))
         }

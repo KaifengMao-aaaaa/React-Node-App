@@ -85,3 +85,12 @@ export async function editProductAmout(orderId: number, newProductAmount: number
   }
   
 }
+
+export async function editOrderDescription(orderId: number, description: string) {
+  try {
+    await update('orders', ['description'], [description], ['ID'], [orderId])
+  } catch(e) {
+    throw createHttpError(400, 'failed to update description');
+  }
+
+}
