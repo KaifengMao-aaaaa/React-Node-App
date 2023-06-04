@@ -1,5 +1,4 @@
 import './App.css';
-import axions from 'axios'
 import React, {useState, useEffect} from 'react';
 import {BrowserRouter, Route, Routes} from 'react-router-dom'
 import HomePage from './pages/homepage';
@@ -13,7 +12,6 @@ import SignUp from './pages/registerPage';
 import ProductPage from './pages/productpage';
 import ProductDetailPage from './pages/productDetailPage';
 import UserPage from './pages/userPage';
-import Test from './components/test';
 import { AuthProvider } from './AuthContext';
 function App() {
   const [uId , setUId] = React.useState(localStorage.getItem('uId'))
@@ -29,9 +27,7 @@ function App() {
           <Route exact path='/user/login' element = {<LoginPage saveId = {setAuth}/>} />
           <Route exact path='/user/register' element = {<SignUp saveId = {setAuth}/>} />
           <Route element = {<SideBar/>}>
-            {/* <Route path='/test' element={<ProtectedRoute/>}/> */}
             <Route path= '/' element = {<ProtectedRoute component = {<HomePage/>}/>} />
-            {/* <Route path='/' element={HomePage}/> */}
             <Route path= '/order' element = {<ProtectedRoute component={<OrderPage/>}/>} />
             <Route path= '/order/:orderId' element = {<ProtectedRoute component={<OrderDetailPage/>} />} />
             <Route path= '/store' element = {<ProtectedRoute component={<StorePage/>}/>} />

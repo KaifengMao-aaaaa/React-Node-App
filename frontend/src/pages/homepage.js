@@ -10,6 +10,8 @@ import Deposits from '../components/Deposite';
 import Orders from '../components/Orders';
 import Copyright from '../components/Layout/Copyright';
 import axions from 'axios'
+import { Button } from '@mui/material';
+import { makeRequest } from '../utils/requestWrapper';
 export default function Body() {
   // const [ordersList,setOrdersList] = useState([])
   const [token, setToken] = React.useContext(AuthContext);
@@ -59,6 +61,10 @@ export default function Body() {
             </Grid>
             <Copyright sx={{ pt: 4 }} />
           </Container>
+          <Button onClick={() => {
+            makeRequest('GET', 'CLEAR', {})
+              .catch((e) => console.log(e))
+          }}>刷新</Button>
         </Box>
       </Box>
   );

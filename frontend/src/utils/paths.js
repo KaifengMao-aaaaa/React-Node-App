@@ -1,4 +1,5 @@
 const PATHS = {
+    CLEAR: '/clear',
     ORDER_DETAIL: '/order/detail',
     ORDER_LISTALL: '/order/listall',
     ORDER_EDITSTATUS: '/order/editStatus',
@@ -7,7 +8,7 @@ const PATHS = {
     ORDER_EDITCLIENT: '/order/editClient',
     ORDER_EDITPRODUCTAMOUNT: '/order/editProductAmount',
     ORDER_EDITSTARTDATE: '/order/editStartDate',
-    ORDERCREATE: '/order/create',
+    ORDER_CREATE: '/order/create',
     ORDER_EDITDESCRIPTION: '/order/editDescription',
 
     PRODUCT_ALLTYPE: '/product/allType',
@@ -15,7 +16,7 @@ const PATHS = {
     PRODUCT_DETAIL: '/product/detail',
     PRODUCT_EDITNAME: '/product/editName',
     PRODUCT_EDITUNIT: '/product/editUnit',
-    PRODUCT_EDITUNITPRICE: '/product/eidtUnitPrice',
+    PRODUCT_EDITUNITPRICE: '/product/editUnitPrice',
     PRODUCT_EDITREMAINING: '/product/editRemaining',
     PRODUCT_EDITMATERIALAMOUNT: '/product/editMaterialAmount',
     PRODUCT_EDITDESCRIPTION: '/product/editDescription',
