@@ -11,9 +11,7 @@ router.get("/listall",async (req, res, next) => {
   }
 });
 router.get("/login",async (req,res,next) => {
-    console.log(req.query)
     const {email, password} = req.query
-    console.log(email, password)
     try {
         res.json(await login(String(email),String(password)))
     } catch(e) {
@@ -23,9 +21,8 @@ router.get("/login",async (req,res,next) => {
 })
 router.post("/register",async (req,res, next) => {
     const {name, email, password} = req.body
-    const result = await userRegister(name, email, password)
     try {
-        res.json(result)
+        res.json(await userRegister(name, email, password))
     } catch(e) {
         next(e)
     }

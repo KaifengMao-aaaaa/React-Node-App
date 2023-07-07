@@ -22,11 +22,11 @@ const columns = [
         type: 'text'
     },
 
-    // {
-    //     field: 'unitPrice',
-    //     headerName: '单价',
-    //     type: 'number'
-    // },
+    {
+        field: 'orderPrice',
+        headerName: '订单价',
+        type: 'number'
+    },
     // {
     //     field: 'totalPrice',
     //     headerName:'总价',

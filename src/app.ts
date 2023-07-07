@@ -3,9 +3,13 @@ import pool from './database'
 const PORT = process.env.PORT || 5000;
 import orderRouter from './routers/order'
 import productRouter from './routers/product'
+import { ordersTimeStamp } from './wrapfunctions/orders';
 import storeRouter from './routers/store'
 import userRouter from './routers/user'
 import {CREATEALLABLE,DROPALLTABLE} from './query'
+import nodemailer from 'nodemailer'
+import {smtpTransport} from 'nodemailer-smtp-transport'
+import { ordersDetail } from './wrapfunctions/orders';
 const app = express();
 
 app.use(express.json())
@@ -23,12 +27,24 @@ app.get('/clear', async (req,res, next) => {
 		}
 		res.json({})
 })
-app.get("/orders/details", (req, res) => {
-  res.json({orders:[{id:1,date:'16 Mar, 2019',name:'kaifeng',shipTo:'he',paymentMethod:'VISA',amount:12, good:12}]});
+app.get("/orders/details",async (req, res, next) => {
+	try {
+		const orders = await ordersDetail();
+		res.json(orders)
+	} catch(e) {
+		next(e)
+	}
 });
 
-app.get("/material/type", (req, res) => {
+app.get("/material/type",async (req, res,next) => {
   res.json({materialsType:[{material: 'fish', unit: 'kg'}, {material: 'apple', unit: 'g'}]});
+});
+app.get("/orders/timeStamp",async (req, res, next) => {
+	try {
+  		res.json(await ordersTimeStamp());
+	} catch(e) {
+		next(e)
+	}
 });
 
 app.use((err, req, res, next) => {

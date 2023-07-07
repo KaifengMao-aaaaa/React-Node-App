@@ -7,6 +7,15 @@ const columns = [
   { field: 'materialName', headerName: '物料', type:'text'},
   { field: 'consuming', headerName: '正在使用', type:'number'},
   {
+    field: 'unitPrice',
+    headerName: '单价',
+    type: 'number',
+  },{
+    field: 'unit',
+    headerName: '单位',
+    type: 'string',
+  },
+  {
     field: 'remaining',
     headerName: '剩余',
     type: 'number',
@@ -24,7 +33,7 @@ export default function DataTable(props) {
     const [storeDate, setStroeData] = React.useState([])
     React.useEffect(function() {
       makeRequest('GET', 'STORE_LISTALL', {})
-            .then(({data}) => {
+            .then(({data}) => {console.log(data)
               const newData = data.storeList.map((data, index) => {
                 return {
                   ...data,

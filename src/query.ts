@@ -35,6 +35,7 @@ CREATE TABLE orders (
   creatorID INT,
   client VARCHAR(255),
   status VARCHAR(255),
+  orderPrice INT,
   FOREIGN KEY (creatorID) REFERENCES users(ID)
 );
 CREATE TABLE store (
@@ -73,7 +74,32 @@ CREATE TABLE tokens (
   userId int,
   time date,
   FOREIGN KEY (userId) REFERENCES users(ID)
-);`
+);
+CREATE TABLE storeTimeStamp (
+  ID INT AUTO_INCREMENT PRIMARY KEY,
+  time date,
+  alteration int,
+  type VARCHAR(255),
+  staffId INT,
+  description VARCHAR(255)
+);
+CREATE TABLE productTimeStamp (
+  ID INT AUTO_INCREMENT PRIMARY KEY,
+  time date,
+  alteration int,
+  type VARCHAR(255),
+  staffId INT,
+  description VARCHAR(255)
+);
+CREATE TABLE OrderTimeStamp (
+  ID INT AUTO_INCREMENT PRIMARY KEY,
+  time date,
+  client VARCHAR(255),
+  staffId INT,
+  description VARCHAR(255),
+  orderId INT
+);
+`
 export const DROPALLTABLE =
 `DROP TABLE tokens;
 DROP TABLE machines; 
@@ -83,4 +109,7 @@ DROP TABLE store;
 DROP TABLE orders;
 DROP TABLE products;
 DROP TABLE users;
-DROP TABLE clients;`
+DROP TABLE clients;
+DROP TABLE storeTimeStamp;
+DROP TABLE productTimeStamp;
+DROP TABLE OrderTimeStamp;`

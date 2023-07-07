@@ -13,7 +13,6 @@ export default function OrderCreate(props) {
     const [orderImformation, setOrderImformation] = React.useState(initState);
     const [productsType,setProductsType] = React.useState([])
     const uId = localStorage.getItem('uId')
-    console.log(uId)
     React.useEffect(function() {
         makeRequest('GET', 'PRODUCT_ALLTYPE')
             .then(({data}) => {setProductsType(data.allProductType)})

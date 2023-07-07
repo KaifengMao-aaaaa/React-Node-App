@@ -1,6 +1,6 @@
 import express from 'express'
 import {} from '../query'
-import {editOrderDescription, orderCreate, orderListAll, orderDetail, orderEditStatus, orderEditDeadline, orderEditClient, editProductAmout } from '../wrapfunctions/order';
+import {editOrderDescription, orderCreate, orderListAll, orderDetail, orderEditStatus, orderEditDeadline, orderEditClient, editProductAmout, checkStatus } from '../wrapfunctions/order';
 // const express = require('express')
 
 const router = express.Router()
@@ -14,6 +14,14 @@ router.get("/detail",async (req, res, next) => {
     next(e)
   }
 });
+router.get('/checkStatus', async (req,res,next) => {
+  const orderId = Number(req.query.orderId)
+  try {
+    res.json(await checkStatus(orderId))
+  } catch(e) {
+    next(e)
+  }
+})
 router.get("/listAll",async (req, res, next) => {
   try {
     res.json(await orderListAll())
@@ -75,8 +83,6 @@ router.put("/editDescription",async (req, res, next) => {
   }
 });
 router.post("/create",  async (req, res, next) => {
-  console.log('here create')
-  console.log(req.body.creatorId)
   const {creatorId,description, client,deadline, products, unitPrice} = req.body
   const createTime = new Date()
   const endTime = new Date(Date.parse(deadline))

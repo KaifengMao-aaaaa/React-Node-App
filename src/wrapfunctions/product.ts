@@ -1,11 +1,13 @@
 import {insert, randomNumber, search, update, directQuery} from './helpers'
 import pool from '../database'
 import createHttpError from 'http-errors'
-export async function productCreate(productName: string, unit: string, unitPrice: number, description: string, materials: {amount: number, materialName: string}[]) {
+export async function productCreate(userId:number,productName: string, unit: string, unitPrice: number, description: string, materials: {amount: number, materialName: string}[]) {
   const productId = randomNumber(10000000,99999999)
   await insert('products', ['ID','productName', 'unit', 'unitPrice', 'description','materials', 'remaining'],
     [productId,productName,unit,unitPrice, description,materials, 0],[5]
   )
+  await insert('productTimeStamp',['time','alteration', 'type','staffId','description'], [new Date(), 0, productName, userId, '创建'])
+  return {productId}
 }
 export async function productListAll() {
   const results = await search('products', ['ROW_NUMBER() OVER (ORDER BY ID) AS id','ID as productId','productName', 'unitPrice', 'remaining', 'unit'],[], [])

@@ -20,7 +20,7 @@ export default function ProductPage() {
             </Card>}
             <Card style={{marginTop:20,marginLeft:100, width: 1000, padding: 20, backgroundColor: 'rgba(247,247,248)'}}>
                 { loadAddPage && <AddProduct closeTriger = {setLoadAddPage}/>}
-                {!loadAddPage && <Button onClick={() => setLoadAddPage(true)}>添加产品</Button>}
+                {!loadAddPage && <Button onClick={() => setLoadAddPage(true)}>添加产品类型</Button>}
                 {(!loadAddPage&&!mode) && <Button onClick={() => setMode('editable')}>修改</Button>}
             </Card>
         </Box>

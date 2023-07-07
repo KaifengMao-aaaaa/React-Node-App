@@ -13,6 +13,7 @@ import ProductPage from './pages/productpage';
 import ProductDetailPage from './pages/productDetailPage';
 import UserPage from './pages/userPage';
 import { AuthProvider } from './AuthContext';
+import HistoryPage from './pages/historyPage';
 function App() {
   const [uId , setUId] = React.useState(localStorage.getItem('uId'))
   function setAuth(uId) {
@@ -33,6 +34,7 @@ function App() {
             <Route path= '/store' element = {<ProtectedRoute component={<StorePage/>}/>} />
             <Route path= '/product' element = {<ProtectedRoute component={<ProductPage/>}/>} />
             <Route path= '/product/:productId' element = {<ProtectedRoute component={<ProductDetailPage/>} />} />
+            <Route path= '/history' element = {<ProtectedRoute component={<HistoryPage/>} />} />
             <Route path= '/user' element = {<UserPage/>} />
           </Route>
         </Routes>

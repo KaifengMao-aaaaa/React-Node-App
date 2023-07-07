@@ -3,78 +3,60 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import ListSubheader from '@mui/material/ListSubheader';
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import PeopleIcon from '@mui/icons-material/People';
-import BarChartIcon from '@mui/icons-material/BarChart';
-import LayersIcon from '@mui/icons-material/Layers';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ArrowOutwardIcon from '@mui/icons-material/ArrowOutward';
 import AssignmentIcon from '@mui/icons-material/Assignment';
-import { Button, Drawer, TextField } from '@mui/material';
 import AuthContext from '../AuthContext';
 export const MainListItems = () => {
-  const [drawerOpen, setDrawerOpen] = React.useState(false);
-  const [name, setName] = React.useState('');
   const [uId, setUId] = React.useContext(AuthContext)
-
-  const toggleDrawer = () => {
-    setDrawerOpen(!drawerOpen);
-  };
-
-  const handleNameChange = event => {
-    setName(event.target.value);
-  };
-
-  const handleSubmit = event => {
-    event.preventDefault();
-    // Perform form submission logic here
-    // Reset form fields
-    console.log(event.currentTarget.id);
-    setName('');
-    // Close the drawer
-    setDrawerOpen(false);
-  };
   return (
   <React.Fragment>
     <ListItemButton href='/'>
       <ListItemIcon>
-        <DashboardIcon />
+        < ArrowOutwardIcon/>
       </ListItemIcon>
       <ListItemText primary="主页" />
     </ListItemButton>
     <ListItemButton href='/order'>
       <ListItemIcon>
-        <ShoppingCartIcon />
+        < ArrowOutwardIcon/>
       </ListItemIcon>
       <ListItemText primary="订单" />
     </ListItemButton>
     <ListItemButton  href='/store'>
       <ListItemIcon>
-        <PeopleIcon />
+        < ArrowOutwardIcon/>
       </ListItemIcon>
       <ListItemText primary="仓库" />
     </ListItemButton>
     <ListItemButton  href='/product'>
       <ListItemIcon>
-        <PeopleIcon />
+        < ArrowOutwardIcon/>
       </ListItemIcon>
       <ListItemText primary="产品" />
     </ListItemButton>
 
     <ListItemButton href='/user'>
       <ListItemIcon>
-        <BarChartIcon />
+        < ArrowOutwardIcon/>
       </ListItemIcon>
       <ListItemText primary="用户" />
     </ListItemButton>
+    <ListItemButton href='/history'>
+      <ListItemIcon>
+        < ArrowOutwardIcon/>
+      </ListItemIcon>
+      <ListItemText primary="记录" />
+    </ListItemButton>
 
-    <ListItemButton onClick={() => {
+    <ListItemButton style={{marginTop:200}} onClick={() => {
       localStorage.removeItem('uId')
       setUId(null)
     }}>
       <ListItemIcon>
-        <LayersIcon />
+        < ArrowBackIcon/>
       </ListItemIcon>
-      <ListItemText primary="退出" />
+      <ListItemText primary="退出"/>
     </ListItemButton>
   </React.Fragment>
 )};

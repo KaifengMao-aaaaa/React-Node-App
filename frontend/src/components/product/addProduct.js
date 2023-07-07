@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Card, FormControl, InputLabel, Select, MenuItem, Button, TextField, Box } from '@mui/material';
 import {makeRequest} from '../../utils/requestWrapper'
+import AuthContext from '../../AuthContext';
 const initState = {
     description: '',
     unitPrice: 0,
@@ -12,6 +13,7 @@ export default function AddProduct(props) {
     const [productImformation, setProductImformation] = React.useState(initState);
     const [materialType, setMaterialType] = React.useState([])
     const [loading, setLoading] = React.useState(false)
+    const [uId, setUid] = React.useContext(AuthContext);
     React.useEffect(function() {
         makeRequest('GET', 'STORE_ALLTYPE',{})
             .then(({data}) => {if (data) {setMaterialType(data.allMaterialType); setLoading(true)}})
@@ -70,7 +72,7 @@ export default function AddProduct(props) {
         if (!productImformation.materials.find((material) => material.materialName === '')
         && productImformation.unitPrice !== 0 && productImformation.productName !== ''
         ) {
-            makeRequest('POST', 'PRODUCT_CREATE',productImformation)
+            makeRequest('POST', 'PRODUCT_CREATE',{userId: uId,...productImformation})
                 .then(setProductImformation(initState))
                 .then(window.location.reload())
                 .catch((e) => console.log(e))

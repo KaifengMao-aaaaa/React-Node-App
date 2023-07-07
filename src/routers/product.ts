@@ -83,8 +83,8 @@ router.put("/editDescription",async (req, res, next) => {
 });
 router.post("/create",async (req, res, next) => {
   try {
-    const {productName, unit, unitPrice, description, materials} = req.body
-    await productCreate(productName, unit,unitPrice, description, materials)
+    const {userId,productName, unit, unitPrice, description, materials} = req.body
+    await productCreate(userId,productName, unit,unitPrice, description, materials)
   } catch(e) {
     next(e)
   }

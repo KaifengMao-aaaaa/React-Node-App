@@ -1,5 +1,5 @@
 import express, { json } from 'express'
-import {storeAddType, storeAddAmout, storeListAll, storeAllType} from '../wrapfunctions/store';
+import {storeAddType, storeAddAmount, storeListAll, storeAllType, storeTimeStamp} from '../wrapfunctions/store';
 const router = express.Router()
 
 router.get("/listall", async (req, res, next) => {
@@ -19,20 +19,27 @@ router.get("/allType", async (req, res, next) => {
   }
 });
 router.post("/add",async (req, res, next) => {
-  const {materialName,amount} = req.body
+  const {userId, description,materialName,amount} = req.body
   try {
-    res.json(await storeAddAmout(materialName, amount))
+    res.json(await storeAddAmount(userId, description,materialName, amount))
   } catch(e) {
     next(e)
   }
 });
 router.post("/addType",async(req, res, next) => {
-  const {materialName, unit, unitPrice} = req.body
+  const {userId,materialName, unit, unitPrice} = req.body
   try {
-    res.json(await storeAddType(materialName, unit, unitPrice))
+    res.json(await storeAddType(userId,materialName, unit, unitPrice))
   } catch(e) {
     next(e)
   }
   
 });
+router.get('/timeStamp', async (req,res,next) =>  {
+  try {
+    res.json(await storeTimeStamp())
+  }catch(e) {
+    next(e)
+  }
+})
 export default router

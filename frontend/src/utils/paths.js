@@ -10,6 +10,8 @@ const PATHS = {
     ORDER_EDITSTARTDATE: '/order/editStartDate',
     ORDER_CREATE: '/order/create',
     ORDER_EDITDESCRIPTION: '/order/editDescription',
+    ORDER_CHECKSTATUS: '/order/checkStatus',
+    ORDERS_TIMESTAMP: '/orders/timeStamp',
 
     PRODUCT_ALLTYPE: '/product/allType',
     PRODUCT_LISTALL: '/product/listall',
@@ -26,6 +28,7 @@ const PATHS = {
     STORE_ALLTYPE: '/store/allType',
     STORE_ADD: '/store/add',
     STORE_ADDTYPE: '/store/addType',
+    STORE_TIMESTAMP: '/store/timeStamp',
 
     USER_LISTALL : '/user/listall'
 }

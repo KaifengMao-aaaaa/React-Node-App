@@ -1,14 +1,16 @@
 import React from "react"
 import {makeRequest} from '../../utils/requestWrapper'
 import { Box, Button, TextField } from "@mui/material"
+import AuthContext from '../../AuthContext';
 export default function  AddMateriaType(props) {
     const [data, setdata] = React.useState({
         materialName:'',
         unitPrice: 0,
         unit: ''
     })
+    const [uId, setUid] = React.useContext(AuthContext);
     function handleSubmit() {
-        makeRequest('POST', 'STORE_ADDTYPE', data)
+        makeRequest('POST', 'STORE_ADDTYPE', {userId: uId,...data})
         .catch((e) => console.log(e))
         .finally( () => {
             props.closePageTriger(null)

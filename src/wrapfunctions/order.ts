@@ -23,7 +23,7 @@ export async function orderDetail(orderId: number) {
 
 export async function orderListAll() {
     try {
-        const results = await directQuery(`SELECT ROW_NUMBER() OVER (ORDER BY orders.ID) AS id,orders.ID as orderId,DATE_FORMAT(orders.time, '%Y/%m/%d') as startDate,DATE_FORMAT(orders.deadlineTime, '%Y/%m/%d') as deadline,client,users.name as userName,status
+        const results = await directQuery(`SELECT ROW_NUMBER() OVER (ORDER BY orders.ID) AS id,orders.ID as orderId,DATE_FORMAT(orders.time, '%Y/%m/%d') as startDate,DATE_FORMAT(orders.deadlineTime, '%Y/%m/%d') as deadline,client,users.name as userName,status, orderPrice
             FROM orders
             Join users 
             On users.ID = orders.creatorId;`,[])
@@ -34,10 +34,21 @@ export async function orderListAll() {
     }
 }
 
-export async function orderCreate(creatorId: number,description: string, client: string, createTime: Date, deadline: Date, products: {productName: string, amount: number}[], unitPrice: number) {
+export async function orderCreate(creatorId: number,description: string, client: string, createTime: Date, deadline: Date, products: {productName: string, amount: number}[], orderPrice: number) {
     const orderId = randomNumber(10000000,99999999)
     try {
-        await insert('orders', ['ID','creatorID', 'description', 'client', 'time', 'deadlineTime', 'products','status'],[orderId,creatorId,description, client, createTime, deadline, products, '未完成'],[6])
+        await insert('orders', ['ID','creatorID', 'description', 'client', 'time', 'deadlineTime', 'products','status', 'orderPrice'],[orderId,creatorId,description, client, createTime, deadline, products, '未完成', orderPrice],[6])
+        for (const product of products) {
+          const productDetail = await search('products', ['materials'], ['productName'], [product.productName])
+          for (const {materialName, amount} of productDetail[0].materials) {
+            const materialDetail = await search('store', ['consuming', 'remaining'], ['materialName'], [materialName])
+            const consuming = materialDetail[0].consuming + (product.amount * amount)
+            const remaining = materialDetail[0].remaining - (product.amount * amount)
+            console.log(consuming, remaining)
+            await update('store', ['remaining', 'consuming'], [remaining, consuming], ['materialName'], [materialName])
+          }
+        }
+        await insert('orderTimeStamp', ['time', 'client', 'description', 'staffId', 'orderId'], [createTime, client, '创建', creatorId, orderId])
     } catch (e) {
         throw createHttpError(400, 'failed to insert orders')
     }
@@ -55,9 +66,32 @@ export async function orderEditClient(orderId: number, newClient: number) {
     throw createHttpError(400, 'failed to edit client')
   }
 }
+export async function checkStatus(orderId: number) {
+  try {
+    const orderDetail = await search('orders', ['status'], ['ID'], [orderId])
+    if (orderDetail[0].status === '完成') {
+      return {orderFinished:true};
+    } else {
+      return {orderFinished:false};
+    }
+  } catch(e) {
+    console.log(e)
+    throw createHttpError(400, 'failed to edit client')
+  }
+}
 export async function orderEditStatus(orderId: number, newStatus: number) {
   try {
     await update('orders', ['status'], [newStatus],['ID'],[orderId])
+    const orderDetail = await search('orders', ['products', 'client', 'creatorId'], ['ID'], [orderId])
+    for (const product of orderDetail[0].products) {
+      const productDetail = await search('products', ['materials'],['productName'], [product.productName])
+      for (const {materialName, amount} of productDetail[0].materials) {
+        const materialDetail = await search('store', ['consuming'], ['materialName'], [materialName])
+        const consuming = materialDetail[0].consuming - amount * product.amount
+        await update('store', ['consuming'], [consuming], ['materialName'], [materialName])
+      }
+      await insert('orderTimeStamp', ['time', 'client', 'description', 'staffId', 'orderId'], [new Date(),orderDetail[0].client, '完成订单', orderDetail[0].creatorId, orderId])
+    }
     return {}
   } catch(e) {
     console.log(e)
