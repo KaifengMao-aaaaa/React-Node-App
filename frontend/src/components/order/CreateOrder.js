@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Card, FormControl, InputLabel, Select, MenuItem, Button, TextField, Box } from '@mui/material';
 import {makeRequest} from '../../utils/requestWrapper'
 import '../../index.css'
+import { NotificationManager } from 'react-notifications';
 const initState = {
     description: '',
     client: '',
@@ -12,11 +13,11 @@ const initState = {
 export default function OrderCreate(props) {
     const [orderImformation, setOrderImformation] = React.useState(initState);
     const [productsType,setProductsType] = React.useState([])
-    const uId = localStorage.getItem('uId')
+    const token = localStorage.getItem('token')
     React.useEffect(function() {
-        makeRequest('GET', 'PRODUCT_ALLTYPE')
-            .then(({data}) => {setProductsType(data.allProductType)})
-    }, [])
+        makeRequest('GET', 'PRODUCT_ALLTYPE', {}, {token})
+            .then(({data}) => {setProductsType(data.allProductType); })
+    }, [orderImformation])
     const handleAnyChange = event => {
     let newOrder
     if (event.target.name.startsWith('productAmount')) {
@@ -69,11 +70,23 @@ export default function OrderCreate(props) {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        console.log('submit')
-        makeRequest('POST', 'ORDER_CREATE', {...orderImformation, creatorId:Number(uId)})
-            .then(setOrderImformation(initState))
-            .then(window.location.reload())
-            .catch((e) => console.log(e))
+        const regex = /^\d{4}\/\d{2}\/\d{2}$/;
+        if (!orderImformation.client) {
+            NotificationManager.warning('缺少客户名')
+        } else if (!regex.test(orderImformation.deadline)) {
+            NotificationManager.warning('截止日期格式应该为yyyy/mm/dd')
+        } else if (!orderImformation.unitPrice) {
+            NotificationManager.warning('缺少单价')
+        } else if (orderImformation.products.filter((product) => product.productName === '' || product.amount === 0).length !== 0) {
+            NotificationManager.warning('缺少产品信息')
+        } else if (orderImformation.products.length === 0) {
+            NotificationManager.warning('至少添加一个产品')
+        } else {
+            makeRequest('POST', 'ORDER_CREATE', {...orderImformation}, {token})
+                .then(() => {setOrderImformation(initState);NotificationManager.success('订单创建成功');setProductsType([])})
+                .catch((e) => NotificationManager.error('订单创建失败'))
+                .finally(window.location.reload())
+        }
     };
     return (
         <Box>

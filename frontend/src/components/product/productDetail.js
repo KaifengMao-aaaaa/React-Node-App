@@ -2,7 +2,8 @@ import * as React from 'react';
 
 import { Box,Paper,TableRow, TableHead, TableContainer, TableCell, TableBody, Table } from '@mui/material';
 import '../../index.css'
-import {makeRequest} from '../../utils/requestWrapper'
+import {makeRequest,encrypt,decrypt} from '../../utils/requestWrapper'
+import {NotificationManager} from 'react-notifications';
 const TAX_RATE = 0.07;
 
 function ccyFormat(num) {
@@ -20,26 +21,27 @@ function subtotal(items) {
 // ];
 
 
-
+const cannotEdit = []
 export default function ProductDetail(props) {
+  const productId = props.productId
 	const [productDetail, setOrderDetail] = React.useState({})
 	const [loading, setLoading] = React.useState(false)
+  const token = localStorage.getItem('token')
     React.useEffect(function() {
-        makeRequest('GET','PRODUCT_DETAIL',{productId:props.productId} )
-        // axions.get("/product/detail", {params: {productId:props.productId}})
+        makeRequest('GET','PRODUCT_DETAIL',{productId:productId}, {token} )
             .then(({data}) => {
 				if (data) {setOrderDetail(data.productDetail); setLoading(true)}})
-			.catch(e => console.log(e))
+			.catch(e => NotificationManager.error(e.response.data))
     }, [props.selected])
-    // console.log(productDetail[0])
     function handleClick(event) {
         const type = event.target.id.match(/[a-zA-Z]+/)[0]; // Matches alphabetic characters
         const row = event.target.id.match(/\d+/)[0];
         if (props.mode === 'editable') {
+            NotificationManager.success(`你选择了${type!=='description' ?productDetail.materials[row][type] : productDetail.description}`)
             props.selectedTriger({field:type, 
               row, 
               materialName: productDetail.materials[row].materialName, 
-              productId: props.productId, 
+              productId: productId, 
               value: type!=='description' ?productDetail.materials[row][type] : productDetail.description})
         }
     }

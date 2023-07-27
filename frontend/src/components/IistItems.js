@@ -7,8 +7,10 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowOutwardIcon from '@mui/icons-material/ArrowOutward';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import AuthContext from '../AuthContext';
+import { makeRequest } from '../utils/requestWrapper';
 export const MainListItems = () => {
-  const [uId, setUId] = React.useContext(AuthContext)
+  const [token, setToken] = React.useContext(AuthContext)
+  console.log(`here is ${token}`)
   return (
   <React.Fragment>
     <ListItemButton href='/'>
@@ -48,10 +50,17 @@ export const MainListItems = () => {
       </ListItemIcon>
       <ListItemText primary="记录" />
     </ListItemButton>
+    <ListItemButton href='/edit'>
+      <ListItemIcon>
+        < ArrowOutwardIcon/>
+      </ListItemIcon>
+      <ListItemText primary="个人信息修改" />
+    </ListItemButton>
 
     <ListItemButton style={{marginTop:200}} onClick={() => {
-      localStorage.removeItem('uId')
-      setUId(null)
+      localStorage.removeItem('token');
+      makeRequest('DELETE','USER_LOGOUT', {token},{token:token})
+        .then(setToken(null))
     }}>
       <ListItemIcon>
         < ArrowBackIcon/>

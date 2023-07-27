@@ -6,13 +6,15 @@ import productRouter from './routers/product'
 import { ordersTimeStamp } from './wrapfunctions/orders';
 import storeRouter from './routers/store'
 import userRouter from './routers/user'
+import topMiddlewares from './routers/topMiddlewares'
+import bottomMiddlewares from './routers/bottomMiddlewares'
 import {CREATEALLABLE,DROPALLTABLE} from './query'
-import nodemailer from 'nodemailer'
-import {smtpTransport} from 'nodemailer-smtp-transport'
 import { ordersDetail } from './wrapfunctions/orders';
 const app = express();
 
 app.use(express.json())
+app.use('/',topMiddlewares)
+
 app.use('/order',orderRouter)
 app.use('/product', productRouter)
 app.use('/store', storeRouter)
@@ -46,7 +48,7 @@ app.get("/orders/timeStamp",async (req, res, next) => {
 		next(e)
 	}
 });
-
+app.use('/',bottomMiddlewares)
 app.use((err, req, res, next) => {
   res.status(err.status||500).send(err.message);
 });

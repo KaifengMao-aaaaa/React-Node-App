@@ -1,6 +1,6 @@
 import express from 'express'
-import {} from '../query'
 import {editOrderDescription, orderCreate, orderListAll, orderDetail, orderEditStatus, orderEditDeadline, orderEditClient, editProductAmout, checkStatus } from '../wrapfunctions/order';
+import { encryptForOutput } from '../wrapfunctions/helpers';
 // const express = require('express')
 
 const router = express.Router()
@@ -8,8 +8,9 @@ const router = express.Router()
 
 router.get("/detail",async (req, res, next) => {
   const orderId = Number(req.query.orderId) 
+  const result = await orderDetail(orderId)
   try {
-    res.json(await orderDetail(orderId)) 
+    res.json(result) 
   } catch(e) {
     next(e)
   }
@@ -50,7 +51,6 @@ router.put("/editDeadline", async(req, res, next) => {
   }
 });
 router.put("/editMaterialAmount", (req, res) => {
-  console.log(req.body)
 });
 router.put("/editClient",async (req, res, next) => {
 
@@ -83,11 +83,11 @@ router.put("/editDescription",async (req, res, next) => {
   }
 });
 router.post("/create",  async (req, res, next) => {
-  const {creatorId,description, client,deadline, products, unitPrice} = req.body
+  const {userId,description, client,deadline, products, unitPrice} = req.body
   const createTime = new Date()
   const endTime = new Date(Date.parse(deadline))
   try {
-    res.json(await orderCreate(creatorId,description, client, createTime, endTime, products, unitPrice))
+    res.json(await orderCreate(userId,description, client, createTime, endTime, products, unitPrice))
   } catch(e) {
     next(e)
   }

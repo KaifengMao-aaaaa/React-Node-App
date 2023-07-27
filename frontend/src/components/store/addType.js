@@ -2,16 +2,19 @@ import React from "react"
 import {makeRequest} from '../../utils/requestWrapper'
 import { Box, Button, TextField } from "@mui/material"
 import AuthContext from '../../AuthContext';
+import {NotificationManager} from 'react-notifications';
 export default function  AddMateriaType(props) {
     const [data, setdata] = React.useState({
         materialName:'',
         unitPrice: 0,
         unit: ''
     })
-    const [uId, setUid] = React.useContext(AuthContext);
+    const token = localStorage.getItem('token')
+    console.log(`token is ${token}`)
     function handleSubmit() {
-        makeRequest('POST', 'STORE_ADDTYPE', {userId: uId,...data})
-        .catch((e) => console.log(e))
+        makeRequest('POST', 'STORE_ADDTYPE', {...data},{token})
+        .then(() => NotificationManager.success(`成功添加物料类型${data.materialName}`))
+        .catch((e) => {NotificationManager.error(e.response.data)})
         .finally( () => {
             props.closePageTriger(null)
             props.updateTableTriger((prev) => prev + 1)
@@ -24,7 +27,6 @@ export default function  AddMateriaType(props) {
         } else if (event.target.name === 'unit') {
             newData = {...data, unit: event.target.value}
         } else if (event.target.name === 'unitPrice') {
-            console.log(typeof event.target.value)
             newData = {...data, unitPrice: Number(event.target.value)}
         }
         setdata(newData)

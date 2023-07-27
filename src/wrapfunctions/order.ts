@@ -29,8 +29,7 @@ export async function orderListAll() {
             On users.ID = orders.creatorId;`,[])
         return {ordersList: results}    
     } catch(e) {
-        console.log(e)
-        throw createHttpError(400, 'failed to search date')
+        throw createHttpError(403, '查询不到信息')
     }
 }
 
@@ -44,13 +43,12 @@ export async function orderCreate(creatorId: number,description: string, client:
             const materialDetail = await search('store', ['consuming', 'remaining'], ['materialName'], [materialName])
             const consuming = materialDetail[0].consuming + (product.amount * amount)
             const remaining = materialDetail[0].remaining - (product.amount * amount)
-            console.log(consuming, remaining)
             await update('store', ['remaining', 'consuming'], [remaining, consuming], ['materialName'], [materialName])
           }
         }
         await insert('orderTimeStamp', ['time', 'client', 'description', 'staffId', 'orderId'], [createTime, client, '创建', creatorId, orderId])
     } catch (e) {
-        throw createHttpError(400, 'failed to insert orders')
+        throw createHttpError(400, '更新数据库失败')
     }
     return {orderId}
 
@@ -63,7 +61,7 @@ export async function orderEditClient(orderId: number, newClient: number) {
     return {}
   } catch(e) {
     console.log(e)
-    throw createHttpError(400, 'failed to edit client')
+    throw createHttpError(400, '更新客户名失败')
   }
 }
 export async function checkStatus(orderId: number) {
@@ -75,8 +73,7 @@ export async function checkStatus(orderId: number) {
       return {orderFinished:false};
     }
   } catch(e) {
-    console.log(e)
-    throw createHttpError(400, 'failed to edit client')
+    throw createHttpError(400, '查看状态失败')
   }
 }
 export async function orderEditStatus(orderId: number, newStatus: number) {
@@ -95,7 +92,7 @@ export async function orderEditStatus(orderId: number, newStatus: number) {
     return {}
   } catch(e) {
     console.log(e)
-    throw createHttpError(400, 'failed to edit status')
+    throw createHttpError(400, '更新状态失败')
   }
 }
 export async function orderEditDeadline(orderId: number, newdeadline: string) {
@@ -105,7 +102,7 @@ export async function orderEditDeadline(orderId: number, newdeadline: string) {
     return {}
   } catch(e) {
     console.log(e)
-    throw createHttpError(400, 'failed to edit deadline')
+    throw createHttpError(400, '更新截止日期失败')
   }
 }
 export async function editProductAmout(orderId: number, newProductAmount: number, row: number) {
@@ -115,7 +112,7 @@ export async function editProductAmout(orderId: number, newProductAmount: number
     where ID = ? ;`, [row,newProductAmount,orderId])
   } catch(e) {
     console.log(e)
-    throw createHttpError(400, 'failed to edit ProductAmount')
+    throw createHttpError(400, '更新产品数量失败')
   }
   
 }
@@ -124,7 +121,7 @@ export async function editOrderDescription(orderId: number, description: string)
   try {
     await update('orders', ['description'], [description], ['ID'], [orderId])
   } catch(e) {
-    throw createHttpError(400, 'failed to update description');
+    throw createHttpError(400, '更新描述失败');
   }
 
 }

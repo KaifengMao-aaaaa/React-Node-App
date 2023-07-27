@@ -1,6 +1,7 @@
 import { Button, Paper, TextField } from "@mui/material";
 import {makeRequest} from '../../utils/requestWrapper'
 import React from "react";
+import { NotificationManager } from "react-notifications";
 const paths = {
     productName: 'PRODUCT_EDITNAME', 
     unit: 'PRODUCT_EDITUNIT',
@@ -10,12 +11,16 @@ const paths = {
 
 export default function EditProduct(props) {
     const [text, setText] = React.useState('')
+    const token = localStorage.getItem('token')
     function editValue(event) {
         event.preventDefault();
         if (props.selected && props.selected.field in paths) {
-            makeRequest('PUT',paths[props.selected.field], {[props.selected.field]: text, productId: props.selected.productId} )
-                .then(props.updateSelected(null))
-                .catch((e)=> console.log(e))
+            makeRequest('PUT',paths[props.selected.field], {[props.selected.field]: text, productId: props.selected.productId}, {token} )
+                .then(() => {
+                    props.updateSelected(null);
+                    NotificationManager.success('修改成功')
+                })
+                .catch((e)=> NotificationManager.error('修改失败'))
         }
     }
     function handleChnage(event) {

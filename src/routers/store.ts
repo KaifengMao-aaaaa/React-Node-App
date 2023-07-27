@@ -31,6 +31,7 @@ router.post("/addType",async(req, res, next) => {
   try {
     res.json(await storeAddType(userId,materialName, unit, unitPrice))
   } catch(e) {
+    console.log(e)
     next(e)
   }
   

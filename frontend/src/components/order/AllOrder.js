@@ -3,9 +3,15 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import { DataGrid } from '@mui/x-data-grid';
-import {makeRequest} from '../../utils/requestWrapper'
+import {makeRequest,encrypt} from '../../utils/requestWrapper'
+import {NotificationManager} from 'react-notifications';
 import '../../index.css'
 import { Button } from '@mui/material';
+const paths = {
+    deadline: 'ORDER_EDITDEADLINE',
+    client: 'ORDER_EDITCLIENT', status: 'ORDER_EDITSTATUS', unitPrice: 'ORDER_UNITPRICE',
+    amount: 'ORDER_EDITAMOUNT'
+}
 const columns = [
     {field: 'id', headerName: 'ID', type: 'number'},
     { field: 'startDate', headerName: '创建日期', type: 'text'},
@@ -38,7 +44,7 @@ const columns = [
         field: 'link',
         headerName :'物料',
         renderCell: (params) => {
-            return (<Button variant='contained' href={'/order/' + String(params.row.orderId)}>
+            return (<Button variant='contained' href={'/order/' + encrypt(String(params.row.orderId))}>
                 查看
             </Button>)
         }
@@ -50,9 +56,11 @@ export default function ListOrders(props) {
 
     const [orderList,setOrderList] = useState([])
     const [loadCreatePage, setLoadCreatePage] = useState(false)
+    const token = localStorage.getItem('token')
     useEffect(function() {
-        makeRequest('GET', 'ORDER_LISTALL')
+        makeRequest('GET', 'ORDER_LISTALL',{}, {token})
             .then(({data}) => {setOrderList(data.ordersList)})
+            .catch((e) => NotificationManager.error(e.response.data))
     }, [loadCreatePage, props.selected])
   return (
       <Box sx={{ display: 'flex' }}>
@@ -77,6 +85,12 @@ export default function ListOrders(props) {
                                         value: orderList.find((order) => order.id === event.id)[event.field],
                                         orderId: orderList.find((order) => order.id === event.id).orderId
                                     })
+                                    if (!(event.field in paths)) {
+                                        NotificationManager.warning('这一列数据不可编辑')
+                                    } else {
+                                        NotificationManager.success(`你选择了${orderList.find((order) => order.id === event.id)[event.field]}`)
+                                    }
+
                                 }
                             }}
                         />

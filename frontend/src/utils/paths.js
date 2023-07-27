@@ -30,6 +30,13 @@ const PATHS = {
     STORE_ADDTYPE: '/store/addType',
     STORE_TIMESTAMP: '/store/timeStamp',
 
-    USER_LISTALL : '/user/listall'
+    USER_LISTALL : '/user/listall',
+    USER_REGISTER : '/user/register',
+    USER_SENDCODE: '/user/sendCode',
+    USER_PERMISSION_MODIFY: '/user/permission/modify',
+    USER_RETRIEVEPASSWORD: '/user/retrievePassword',
+    USER_EDITPASSWORD: '/user/editPassword',
+    USER_GETEMAIL: '/user/getEmail',
+    USER_LOGOUT: '/user/logout',
 }
 export default PATHS;

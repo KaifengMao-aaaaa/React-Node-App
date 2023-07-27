@@ -1,5 +1,4 @@
-import {insert, randomNumber, search, update, directQuery} from './helpers'
-import pool from '../database'
+import {insert, randomNumber, search, update, directQuery, encrypt} from './helpers'
 import createHttpError from 'http-errors'
 export async function productCreate(userId:number,productName: string, unit: string, unitPrice: number, description: string, materials: {amount: number, materialName: string}[]) {
   const productId = randomNumber(10000000,99999999)
@@ -49,7 +48,7 @@ export async function productEditName(productId: number, newProductName: string)
     return {}
   } catch(e) {
     console.log(e)
-    throw createHttpError(400, 'failed to edit name')
+    throw createHttpError(400, '更新产品名字失败')
   }
 }
 export async function productEditUnit(productId: number, newUnit: string) {
@@ -58,7 +57,7 @@ export async function productEditUnit(productId: number, newUnit: string) {
     return {}
   } catch(e) {
     console.log(e)
-    throw createHttpError(400, 'failed to edit unit')
+    throw createHttpError(400, '更新产品单位失败')
   }
 }
 
@@ -68,7 +67,7 @@ export async function productEditUnitPrice(productId: number, newUnitPrice: numb
     return {}
   } catch(e) {
     console.log(e)
-    throw createHttpError(400, 'failed to edit unitPrice')
+    throw createHttpError(400, '更新产品单价失败')
   }
 }
 export async function productEditRemaining(productId: number, newRemaining: number) {
@@ -77,7 +76,7 @@ export async function productEditRemaining(productId: number, newRemaining: numb
     return {}
   } catch(e) {
     console.log(e)
-    throw createHttpError(400, 'failed to edit remaining')
+    throw createHttpError(400, '更新产品剩余失败')
   }
 }
 
@@ -89,7 +88,7 @@ export async function productEditMaterialAmount(productId: number, newMaterialAm
     return {}
   } catch(e) {
     console.log(e)
-    throw createHttpError(400, 'failed to edit materialAmount')
+    throw createHttpError(400, '更新物料需求失败')
   }
 }
 export async function productEditDescription(productId: number,description: string) {
@@ -98,6 +97,6 @@ export async function productEditDescription(productId: number,description: stri
     return {}
   } catch(e) {
     console.log(e)
-    throw createHttpError(400, 'failed to edit description')
+    throw createHttpError(400, '更新描述失败')
   }
 }

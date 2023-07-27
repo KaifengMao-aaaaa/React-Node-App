@@ -1,11 +1,9 @@
-import * as React from 'react';
+// import * as React from 'react';
+import React from 'react'
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import axions from 'axios'
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -14,7 +12,9 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import {useNavigate} from "react-router-dom"
-
+import { MuiOtpInput } from 'mui-one-time-password-input'
+import { makeRequest } from '../utils/requestWrapper';
+import { NotificationManager } from 'react-notifications';
 function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
@@ -32,22 +32,61 @@ function Copyright(props) {
 
 const defaultTheme = createTheme();
 export default function SignUp(props) {
+    const [otp, setOtp] = React.useState('')
+    const [timer, setTimer] = React.useState({
+      startDate: new Date(),
+      remainingTine: 0
+    })
+    const [email, setEmail] = React.useState('')
     const history = useNavigate()
+    const handleChange = (newValue) => {
+      setOtp(newValue)
+    }
+    const handleEmail = (value) => {
+      setEmail(value.target.value)
+    }
+    React.useEffect(() => {
+      if (timer.remainingTine > 0) {
+        setTimer({
+          remainingTine: timer.remainingTine - (Math.abs((new Date() - timer.startDate) / 1000)),
+          startDate: new Date(),
+        })
+      }
+    }, [timer.remainingTine])
+    const resetTimer = () => {
+
+      const pattern = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
+      if (timer.remainingTine > 0) {
+        NotificationManager.warning('请稍微等待一会')
+      } else if (!pattern.test(email)) {
+        NotificationManager.warning('邮箱无效')
+      }else {
+        makeRequest('POST', 'USER_SENDCODE',{email:email, type: '注册'})
+          .then(NotificationManager.success('验证码发送成功'))
+          .catch(e => NotificationManager.error(e.response.data))
+        setTimer({
+          remainingTine: 30,
+          startDate: new Date()
+        })
+      } 
+    }
     const handleSubmit = (event) => {
-        event.preventDefault();
-        const data = new FormData(event.currentTarget);
-        axions.post('/user/register', {
-            name: data.get('firstName') + data.get('lastName'),
-            email: data.get('email'),
-            password: data.get('password')
-        }) 
-          .then(({data}) => props.saveId(data.userId))
-          .catch((e) => console.log(e))
-          history('/user/login')
-    };
+      event.preventDefault();
+      const data = new FormData(event.currentTarget);
+      makeRequest('POST','USER_REGISTER', {
+          name: data.get('firstName') + data.get('lastName'),
+          email: data.get('email'),
+          password: data.get('password'),
+          verficationCode: otp
+      }) 
+        .then(({data}) => {props.saveId(data.userId); NotificationManager.success('注册成功'); history('/user/login')})
+        .catch((e) => NotificationManager.error(e.response.data))
+  };
 
   return (
+
     <ThemeProvider theme={defaultTheme}>
+
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
@@ -77,6 +116,7 @@ export default function SignUp(props) {
                   autoFocus
                 />
               </Grid>
+
               <Grid item xs={12} sm={6}>
                 <TextField
                   required
@@ -95,6 +135,7 @@ export default function SignUp(props) {
                   label="Email Address"
                   name="email"
                   autoComplete="email"
+                  onChange={handleEmail}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -108,12 +149,15 @@ export default function SignUp(props) {
                   autoComplete="new-password"
                 />
               </Grid>
-              <Grid item xs={12}>
-                <FormControlLabel
-                  control={<Checkbox value="allowExtraEmails" color="primary" />}
-                  label="I want to receive inspiration, marketing promotions and updates via email."
-                />
+              <Grid item>
+                <Button variant = "outlined" onClick={resetTimer}>
+                  {timer.remainingTine != 0 && parseInt(timer.remainingTine) || '发送验证码到邮箱'}
+                 </Button>
               </Grid>
+              <Grid item xs={12}>
+                <MuiOtpInput value={otp} onChange={handleChange} length={6} />
+              </Grid>
+
             </Grid>
             <Button
               type="submit"

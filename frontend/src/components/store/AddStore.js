@@ -2,26 +2,35 @@ import React, { useState } from 'react';
 import { TextField, Button, FormControl, InputLabel, Select, orderImformation, MenuItem} from '@mui/material';
 import {makeRequest} from '../../utils/requestWrapper'
 import AuthContext from '../../AuthContext';
+import {NotificationManager} from 'react-notifications';
 const AddMaterial = (props) => {
     const [amount, setAmount] = useState('');
     const [materialsOptions, setmaterialOptions] = useState([])
     const [description, setDescription] = useState('')
     const [selectedMaterial, setSelectedMaterial] = React.useState(null)
-    const [uId, setUid] = React.useContext(AuthContext)
+    const token = localStorage.getItem('token')
     const handleAmountChange = (event) => {
         setAmount(event.target.value);
     };
     const handleSubmit = (event) => {
         event.preventDefault();
-        makeRequest('POST', 'STORE_ADD', {userId: uId ,description: description,amount: Number(amount), materialName: selectedMaterial})
-            .catch((e) => console.log(e))
-        setAmount('');
-        setSelectedMaterial(null)
-        props.updateTableTriger((prev) => prev + 1)
+        makeRequest('POST', 'STORE_ADD', {description: description,amount: Number(amount), materialName: selectedMaterial}, {token})
+            .then(() => {
+              NotificationManager.success(`成功添加${selectedMaterial} ${amount} 单位`);
+            })
+            .catch((e) => NotificationManager.error(e.response.data))
+            .finally(() => {
+              setAmount('');
+              setSelectedMaterial(null)
+              props.updateTableTriger((prev) => prev + 1)
+            })
     };
     React.useEffect(function() {
-        makeRequest('GET', 'STORE_ALLTYPE', {})
-            .then(({data}) => {setmaterialOptions(data.allMaterialType)})
+        makeRequest('GET', 'STORE_ALLTYPE', {},{token})
+            .then(({data}) => {
+              setmaterialOptions(data.allMaterialType)            
+              NotificationManager.success(`信息已经全部更新`);
+            })
     }, [])
 
   const handleAnyChange = (value) => {
@@ -54,7 +63,6 @@ const AddMaterial = (props) => {
         <TextField label='描述' value = {description} onChange={handleDescriptionChnage} />
         <Button onClick={handleSubmit}>提交</Button>
         <Button onClick={() => props.closeTriger(null)}>关闭</Button>
-      
     </form>
   );
 };

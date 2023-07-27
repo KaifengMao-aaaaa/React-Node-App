@@ -7,7 +7,8 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import '../../index.css'
-import { makeRequest } from '../../utils/requestWrapper';
+import { makeRequest, decrypt } from '../../utils/requestWrapper';
+import { NotificationManager } from 'react-notifications';
 const TAX_RATE = 0.07;
 
 function ccyFormat(num) {
@@ -19,26 +20,29 @@ function subtotal(items) {
 }
 
 export default function OrderDetail(props) {
+  const orderId = props.orderId
 	const [orderDetail, setOrderDetail] = React.useState({})
 	const [loading, setLoading] = React.useState(false)
+  const token = localStorage.getItem('token')
+  console.log(token)
     React.useEffect(function() {
-        makeRequest('GET', 'ORDER_DETAIL', {orderId: props.orderId})
+        makeRequest('GET', 'ORDER_DETAIL', {orderId: orderId}, {token})
             .then(({data}) => {
 				        if (data) {setOrderDetail(data.orderDetail); setLoading(true)}})
-			  .catch((e) => console.log(e))
+			  .catch((e) => NotificationManager.error(e.response.data))
     }, [props.selected])
   function handleClick(event) {
         const type = event.target.id.match(/[a-zA-Z]+/)[0]; // Matches alphabetic characters
         const row = event.target.id.match(/\d+/)[0];
-        console.log(type,row)
         if (props.mode === 'editable') {
             props.setSelectedTriger({
               type, 
               row: Number(row),
               productName: type === 'description'? null: orderDetail.requiredProducts[row].productName, 
-              orderId: Number(props.orderId),
+              orderId: orderId,
               value: type === 'description'? orderDetail.description: Number(orderDetail.requiredProducts[row].amount)
             })
+            NotificationManager.success(`你选择了${type === 'description'? orderDetail.description: Number(orderDetail.requiredProducts[row].amount)}`)
         }
     }
 	let invoiceSubtotal 
@@ -49,7 +53,6 @@ export default function OrderDetail(props) {
 	// 	invoiceTaxes = TAX_RATE * invoiceSubtotal;
 		invoiceTotal = invoiceSubtotal;
 	}
-  console.log(orderDetail.requiredProducts)
   return (
     <Paper style={{}}>
     {loading && <TableContainer component={Paper} >

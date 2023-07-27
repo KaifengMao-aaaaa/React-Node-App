@@ -70,9 +70,9 @@ CREATE TABLE machines (
 );
 CREATE TABLE tokens (
   token VARCHAR(255) PRIMARY KEY,
-  valid boolean,
   userId int,
-  time date,
+  time DATETIME,
+  expirationTime DATETIME,
   FOREIGN KEY (userId) REFERENCES users(ID)
 );
 CREATE TABLE storeTimeStamp (
@@ -99,9 +99,15 @@ CREATE TABLE OrderTimeStamp (
   description VARCHAR(255),
   orderId INT
 );
+CREATE TABLE VerficationCode (
+  code INT PRIMARY KEY,
+  time date,
+  type VARCHAR(255) 
+)
 `
 export const DROPALLTABLE =
-`DROP TABLE tokens;
+`DROP TABLE VerficationCode;
+DROP TABLE tokens;
 DROP TABLE machines; 
 DROP TABLE action_record; 
 DROP TABLE record;

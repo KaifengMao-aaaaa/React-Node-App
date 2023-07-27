@@ -1,10 +1,9 @@
 import React, {useState, useEffect} from 'react';
 import Box from '@mui/material/Box';
-import AuthContext from '../AuthContext';
-import axions from 'axios'
 import { Button } from '@mui/material';
-import { makeRequest } from '../utils/requestWrapper';
+import { encrypt, makeRequest } from '../utils/requestWrapper';
 import { DataGrid } from '@mui/x-data-grid';
+import { NotificationManager } from 'react-notifications';
 const data = [{
     id:1
 }]
@@ -15,7 +14,7 @@ const ordersColumns = [
   { field: 'orderPrice', width: 80, headerName:'成交价格' },
   { field: 'staffName', width: 80, headerName:'员工' },
   {headerName: '更多', renderCell: (params) => {
-    return (<Button variant='contained' href={'/order/' + String(params.row.orderId)}>
+    return (<Button variant='contained' href={'/order/' + encrypt(String(params.row.orderId))}>
         订单信息
     </Button>)
   }},
@@ -35,11 +34,14 @@ const storeColumns = [
 export default function HistoryPage() {
     const [orderHistory, setOrderHistory] = useState([])
     const [storeHistory, setStoreHistory] = useState([])
+    const token = localStorage.getItem('token')
   useEffect(function() {
-    makeRequest('GET','ORDERS_TIMESTAMP')
+    makeRequest('GET','ORDERS_TIMESTAMP', {}, {token})
       .then(({data}) => {setOrderHistory(data.ordersTimeStamp)})
-    makeRequest('GET','STORE_TIMESTAMP')
+      .catch((e) => NotificationManager.error(e.response.data))
+    makeRequest('GET','STORE_TIMESTAMP', {}, {token})
       .then(({data}) => setStoreHistory(data.storeTimeStamp))
+      .catch((e) => NotificationManager.error(e.response.data))
   }, [])
   return (
     <Box sx={{ marginLeft:15, marginTop:10, width:'60%'}}>

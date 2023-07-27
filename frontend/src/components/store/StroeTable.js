@@ -2,6 +2,7 @@
 import * as React from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import {makeRequest} from '../../utils/requestWrapper'
+import { NotificationManager } from 'react-notifications';
 const columns = [
     {field: 'id', headerName: 'ID'},
   { field: 'materialName', headerName: '物料', type:'text'},
@@ -31,8 +32,9 @@ const columns = [
 
 export default function DataTable(props) {
     const [storeDate, setStroeData] = React.useState([])
+    const token = localStorage.getItem('token')
     React.useEffect(function() {
-      makeRequest('GET', 'STORE_LISTALL', {})
+      makeRequest('GET', 'STORE_LISTALL',{}, {token})
             .then(({data}) => {console.log(data)
               const newData = data.storeList.map((data, index) => {
                 return {
@@ -42,7 +44,7 @@ export default function DataTable(props) {
               })
               setStroeData(newData)
             })
-            .catch((e) => console.log(e))
+            .catch((e) => NotificationManager.error(e.response.data))
     }, [props.update])
 
     function handleClickBox(event) {
