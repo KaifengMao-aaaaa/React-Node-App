@@ -14,7 +14,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import {useNavigate} from "react-router-dom"
-import axions from 'axios'
+import { makeRequest } from '../utils/requestWrapper';
 import { NotificationManager } from 'react-notifications';
 function Copyright(props) {
   return (
@@ -37,10 +37,18 @@ export default function LoginPage(props) {
     const handleSubmit = (event) => {
       event.preventDefault();
       const data = new FormData(event.currentTarget);
-      axions.get('/user/login', {params:{email: data.get('email'), password: data.get('password')}})
-      .then(({data}) => props.saveId(data.token))
-      .then(() => history('/'))
-      .catch((e) => NotificationManager.error(e.response.data))
+      makeRequest('GET','USER_LOGIN',{email: data.get('email'), password: data.get('password')})
+        .then(({data}) => {
+          props.saveId(data.token)
+          makeRequest('GET', 'PAGE_ISAVAILABLE',{}, {token: data.token})
+            .then(({data}) => {
+              localStorage.setItem('availablePages', data.availablePages)
+              history('/')
+            })
+            .catch((e) => NotificationManager.error(e.response.data))
+
+        })
+        .catch((e) => NotificationManager.error(e.response.data))
 
       
   };

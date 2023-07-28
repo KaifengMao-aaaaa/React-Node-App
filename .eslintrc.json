@@ -24,12 +24,14 @@
   "globals": {
     "document": "readonly",
     "navigator": "readonly",
-    "window": "readonly"
+    "window": "readonly",
+    "promise": "off"
   },
   "rules": {
 
     "no-unused-vars": ["error", {
       "args": "none",
+      "varsIgnorePattern": "^_",
       "caughtErrors": "none",
       "ignoreRestSiblings": true,
       "vars": "all"

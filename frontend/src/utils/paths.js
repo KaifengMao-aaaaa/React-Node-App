@@ -38,5 +38,8 @@ const PATHS = {
     USER_EDITPASSWORD: '/user/editPassword',
     USER_GETEMAIL: '/user/getEmail',
     USER_LOGOUT: '/user/logout',
+    USER_LOGIN: '/user/login',
+
+    PAGE_ISAVAILABLE: '/page/isAvailable',
 }
 export default PATHS;

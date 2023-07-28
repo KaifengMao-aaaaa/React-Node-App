@@ -8,8 +8,8 @@
     "test": "jest",
     "tsc": "tsc --noEmit",
     "ts-node": "ts-node",
-    "lint": "eslint src/**.ts",
-    "lint-fix": "eslint --fix src/**.ts",
+    "lint": "eslint src/*/**.ts",
+    "lint-fix": "eslint --fix src/**/*.ts",
     "ts-node-dev": "ts-node-dev",
     "start-dev": "nodemon src/app.ts"
   },

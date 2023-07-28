@@ -20,6 +20,7 @@ const AddMaterial = (props) => {
             })
             .catch((e) => NotificationManager.error(e.response.data))
             .finally(() => {
+              console.log('finally')
               setAmount('');
               setSelectedMaterial(null)
               props.updateTableTriger((prev) => prev + 1)
@@ -31,6 +32,7 @@ const AddMaterial = (props) => {
               setmaterialOptions(data.allMaterialType)            
               NotificationManager.success(`信息已经全部更新`);
             })
+            .catch((e) => NotificationManager.error(e.response.data))
     }, [])
 
   const handleAnyChange = (value) => {

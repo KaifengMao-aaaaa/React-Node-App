@@ -1,6 +1,6 @@
 import request, { HttpVerb } from 'sync-request';
-const url = '5000'
-const port = 'http://localhost'
+const url = '5000';
+const port = 'http://localhost';
 const SERVER_URL = `${url}:${port}`;
 
 export function requestHelper(method: HttpVerb, path: string, payload: object, token : string|undefined = undefined) {

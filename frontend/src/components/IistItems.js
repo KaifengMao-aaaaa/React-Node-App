@@ -8,54 +8,55 @@ import ArrowOutwardIcon from '@mui/icons-material/ArrowOutward';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import AuthContext from '../AuthContext';
 import { makeRequest } from '../utils/requestWrapper';
+import { sections } from '../setting';
 export const MainListItems = () => {
   const [token, setToken] = React.useContext(AuthContext)
-  console.log(`here is ${token}`)
+  const availablePages = localStorage.getItem('availablePages').split(',');
+  console.log(availablePages)
   return (
   <React.Fragment>
-    <ListItemButton href='/'>
+    {availablePages.includes(sections.HOME) && <ListItemButton href='/'>
       <ListItemIcon>
         < ArrowOutwardIcon/>
       </ListItemIcon>
       <ListItemText primary="主页" />
-    </ListItemButton>
-    <ListItemButton href='/order'>
+    </ListItemButton>}
+    {availablePages.includes(sections.SALES) && <ListItemButton href='/order'>
       <ListItemIcon>
         < ArrowOutwardIcon/>
       </ListItemIcon>
       <ListItemText primary="订单" />
-    </ListItemButton>
-    <ListItemButton  href='/store'>
+    </ListItemButton>}
+    {availablePages.includes(sections.STORE) && <ListItemButton  href='/store'>
       <ListItemIcon>
         < ArrowOutwardIcon/>
       </ListItemIcon>
       <ListItemText primary="仓库" />
-    </ListItemButton>
-    <ListItemButton  href='/product'>
+    </ListItemButton>}
+    {availablePages.includes(sections.PRODUCTS) && <ListItemButton  href='/product'>
       <ListItemIcon>
         < ArrowOutwardIcon/>
       </ListItemIcon>
       <ListItemText primary="产品" />
-    </ListItemButton>
-
-    <ListItemButton href='/user'>
+    </ListItemButton>}
+    {availablePages.includes(sections.USERS) && <ListItemButton href='/user'>
       <ListItemIcon>
         < ArrowOutwardIcon/>
       </ListItemIcon>
       <ListItemText primary="用户" />
-    </ListItemButton>
-    <ListItemButton href='/history'>
+    </ListItemButton>}
+    {availablePages.includes(sections.HISTORY) && <ListItemButton href='/history'>
       <ListItemIcon>
         < ArrowOutwardIcon/>
       </ListItemIcon>
       <ListItemText primary="记录" />
-    </ListItemButton>
-    <ListItemButton href='/edit'>
+    </ListItemButton>}
+    {availablePages.includes(sections.PROFILE) && <ListItemButton href='/edit'>
       <ListItemIcon>
         < ArrowOutwardIcon/>
       </ListItemIcon>
       <ListItemText primary="个人信息修改" />
-    </ListItemButton>
+    </ListItemButton>}
 
     <ListItemButton style={{marginTop:200}} onClick={() => {
       localStorage.removeItem('token');

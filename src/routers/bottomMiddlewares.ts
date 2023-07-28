@@ -1,9 +1,9 @@
-import express from 'express'
-const router = express.Router()
-router.use((req,res,next) => {
-    console.log('end')
+import express from 'express';
+const router = express.Router();
+router.use((req, res, next) => {
+  console.log('end');
 
-    next()
-})
+  next();
+});
 
-export default router
+export default router;

@@ -1,8 +1,8 @@
 export const INSERT = {
 
-}
+};
 
-export const CREATEALLABLE = 
+export const CREATEALLABLE =
 `CREATE TABLE clients (
   ID INT  PRIMARY KEY,
   name VARCHAR(255),
@@ -104,7 +104,7 @@ CREATE TABLE VerficationCode (
   time date,
   type VARCHAR(255) 
 )
-`
+`;
 export const DROPALLTABLE =
 `DROP TABLE VerficationCode;
 DROP TABLE tokens;
@@ -118,4 +118,4 @@ DROP TABLE users;
 DROP TABLE clients;
 DROP TABLE storeTimeStamp;
 DROP TABLE productTimeStamp;
-DROP TABLE OrderTimeStamp;`
+DROP TABLE OrderTimeStamp;`;
