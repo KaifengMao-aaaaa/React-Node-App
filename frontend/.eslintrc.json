@@ -15,5 +15,21 @@
         "react"
     ],
     "rules": {
+        "react/prop-types": "off",
+        "array-callback-return": "off",
+        "no-unused-vars": ["error", {
+            "args": "none",
+            "varsIgnorePattern": "^_",
+            "caughtErrors": "none",
+            "ignoreRestSiblings": true,
+            "vars": "all"
+        }],
+        "react/jsx-uses-react": "off",
+        "react/react-in-jsx-scope": "off"
+    },
+    "settings": {
+        "react": {
+            "version": "detect"
+        }
     }
 }

@@ -1,22 +1,21 @@
-
-import * as React from 'react';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import {useNavigate} from "react-router-dom"
-import { makeRequest } from '../utils/requestWrapper';
-import { NotificationManager } from 'react-notifications';
-function Copyright(props) {
+import * as React from 'react'
+import Avatar from '@mui/material/Avatar'
+import Button from '@mui/material/Button'
+import CssBaseline from '@mui/material/CssBaseline'
+import TextField from '@mui/material/TextField'
+import FormControlLabel from '@mui/material/FormControlLabel'
+import Checkbox from '@mui/material/Checkbox'
+import Link from '@mui/material/Link'
+import Grid from '@mui/material/Grid'
+import Box from '@mui/material/Box'
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
+import Typography from '@mui/material/Typography'
+import Container from '@mui/material/Container'
+import { createTheme, ThemeProvider } from '@mui/material/styles'
+import { useNavigate } from 'react-router-dom'
+import { makeRequest } from '../utils/requestWrapper'
+import { NotificationManager } from 'react-notifications'
+function Copyright (props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
       {'Copyright © '}
@@ -26,32 +25,29 @@ function Copyright(props) {
       {new Date().getFullYear()}
       {'.'}
     </Typography>
-  );
+  )
 }
 // TODO remove, this demo shouldn't need to reset the theme.
 
-const defaultTheme = createTheme();
+const defaultTheme = createTheme()
 
-export default function LoginPage(props) {
-    const history = useNavigate()
-    const handleSubmit = (event) => {
-      event.preventDefault();
-      const data = new FormData(event.currentTarget);
-      makeRequest('GET','USER_LOGIN',{email: data.get('email'), password: data.get('password')})
-        .then(({data}) => {
-          props.saveId(data.token)
-          makeRequest('GET', 'PAGE_ISAVAILABLE',{}, {token: data.token})
-            .then(({data}) => {
-              localStorage.setItem('availablePages', data.availablePages)
-              history('/')
-            })
-            .catch((e) => NotificationManager.error(e.response.data))
-
-        })
-        .catch((e) => NotificationManager.error(e.response.data))
-
-      
-  };
+export default function LoginPage (props) {
+  const history = useNavigate()
+  const handleSubmit = (event) => {
+    event.preventDefault()
+    const data = new FormData(event.currentTarget)
+    makeRequest('GET', 'USER_LOGIN', { email: data.get('email'), password: data.get('password') })
+      .then(({ data }) => {
+        props.saveId(data.token)
+        makeRequest('GET', 'PAGE_ISAVAILABLE', {}, { token: data.token })
+          .then(({ data }) => {
+            localStorage.setItem('availablePages', data.availablePages)
+            history('/')
+          })
+          .catch((e) => NotificationManager.error(e.response.data))
+      })
+      .catch((e) => NotificationManager.error(e.response.data))
+  }
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -62,7 +58,7 @@ export default function LoginPage(props) {
             marginTop: 8,
             display: 'flex',
             flexDirection: 'column',
-            alignItems: 'center',
+            alignItems: 'center'
           }}
         >
           <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
@@ -122,5 +118,5 @@ export default function LoginPage(props) {
         <Copyright sx={{ mt: 8, mb: 4 }} />
       </Container>
     </ThemeProvider>
-  );
+  )
 }

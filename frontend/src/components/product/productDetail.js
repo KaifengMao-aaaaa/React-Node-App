@@ -1,17 +1,15 @@
-import * as React from 'react';
+import * as React from 'react'
 
-import { Box,Paper,TableRow, TableHead, TableContainer, TableCell, TableBody, Table } from '@mui/material';
+import { Box, Paper, TableRow, TableHead, TableContainer, TableCell, TableBody, Table } from '@mui/material'
 import '../../index.css'
-import {makeRequest,encrypt,decrypt} from '../../utils/requestWrapper'
-import {NotificationManager} from 'react-notifications';
-const TAX_RATE = 0.07;
-
-function ccyFormat(num) {
-  return `${num.toFixed(2)}`;
+import { makeRequest } from '../../utils/requestWrapper'
+import { NotificationManager } from 'react-notifications'
+function ccyFormat (num) {
+  return `${num.toFixed(2)}`
 }
 
-function subtotal(items) {
-  return items.map(({ amount, unitPrice }) => amount * unitPrice).reduce((sum, i) => sum + i, 0);
+function subtotal (items) {
+  return items.map(({ amount, unitPrice }) => amount * unitPrice).reduce((sum, i) => sum + i, 0)
 }
 
 // const rows = [
@@ -20,39 +18,39 @@ function subtotal(items) {
 //   createRow('Waste Basket', 2, 17.99),
 // ];
 
-
-const cannotEdit = []
-export default function ProductDetail(props) {
+export default function ProductDetail (props) {
   const productId = props.productId
-	const [productDetail, setOrderDetail] = React.useState({})
-	const [loading, setLoading] = React.useState(false)
+  const [productDetail, setOrderDetail] = React.useState({})
+  const [loading, setLoading] = React.useState(false)
   const token = localStorage.getItem('token')
-    React.useEffect(function() {
-        makeRequest('GET','PRODUCT_DETAIL',{productId:productId}, {token} )
-            .then(({data}) => {
-				if (data) {setOrderDetail(data.productDetail); setLoading(true)}})
-			.catch(e => NotificationManager.error(e.response.data))
-    }, [props.selected])
-    function handleClick(event) {
-        const type = event.target.id.match(/[a-zA-Z]+/)[0]; // Matches alphabetic characters
-        const row = event.target.id.match(/\d+/)[0];
-        if (props.mode === 'editable') {
-            NotificationManager.success(`你选择了${type!=='description' ?productDetail.materials[row][type] : productDetail.description}`)
-            props.selectedTriger({field:type, 
-              row, 
-              materialName: productDetail.materials[row].materialName, 
-              productId: productId, 
-              value: type!=='description' ?productDetail.materials[row][type] : productDetail.description})
-        }
+  React.useEffect(function () {
+    makeRequest('GET', 'PRODUCT_DETAIL', { productId }, { token })
+      .then(({ data }) => {
+        if (data) { setOrderDetail(data.productDetail); setLoading(true) }
+      })
+      .catch(e => NotificationManager.error(e.response.data))
+  }, [props.selected])
+  function handleClick (event) {
+    const type = event.target.id.match(/[a-zA-Z]+/)[0] // Matches alphabetic characters
+    const row = event.target.id.match(/\d+/)[0]
+    if (props.mode === 'editable') {
+      NotificationManager.success(`你选择了${type !== 'description' ? productDetail.materials[row][type] : productDetail.description}`)
+      props.selectedTriger({
+        field: type,
+        row,
+        materialName: productDetail.materials[row].materialName,
+        productId,
+        value: type !== 'description' ? productDetail.materials[row][type] : productDetail.description
+      })
     }
-	let invoiceSubtotal 
-	// let invoiceTaxes
-	let invoiceTotal 
-	if (loading) {
-		invoiceSubtotal = subtotal(productDetail.materials);
-	// 	invoiceTaxes = TAX_RATE * invoiceSubtotal;
-		invoiceTotal = invoiceSubtotal;
-	}
+  }
+  let invoiceSubtotal
+  // let invoiceTaxes
+  let invoiceTotal
+  if (loading) {
+    invoiceSubtotal = subtotal(productDetail.materials)
+    invoiceTotal = invoiceSubtotal
+  }
   return (
     <Box >
 
@@ -61,9 +59,7 @@ export default function ProductDetail(props) {
       <Table key={'id'} sx={{ minWidth: 700 }} aria-label="spanning table">
         <TableHead>
           <TableRow>
-            <TableCell align="center" colSpan={4}>
-				物料需求
-            </TableCell>
+            <TableCell align="center" colSpan={4}>物料需求</TableCell>
           </TableRow>
           <TableRow >
             <TableCell>材料</TableCell>
@@ -73,7 +69,7 @@ export default function ProductDetail(props) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {productDetail.materials.map((row,index) => (
+          {productDetail.materials.map((row, index) => (
             <TableRow key={row.ID}>
               <TableCell id={'material' + String(index)}>{row.materialName}</TableCell>
               <TableCell align="right" id={'amount' + String(index)} onDoubleClick={handleClick} >{row.amount}</TableCell>
@@ -100,11 +96,10 @@ export default function ProductDetail(props) {
       </Table>
     </TableContainer>}
     </Paper>
-    <Paper style={{padding: 10, marginTop: 30}}>
+    <Paper style={{ padding: 10, marginTop: 30 }}>
         <h2>备注</h2>
         <p onDoubleClick={handleClick} id='description0'>{productDetail.description}</p>
     </Paper>
     </Box>
-  );
-
+  )
 }

@@ -1,17 +1,17 @@
-import * as React from 'react';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import ListSubheader from '@mui/material/ListSubheader';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import ArrowOutwardIcon from '@mui/icons-material/ArrowOutward';
-import AssignmentIcon from '@mui/icons-material/Assignment';
-import AuthContext from '../AuthContext';
-import { makeRequest } from '../utils/requestWrapper';
-import { sections } from '../setting';
+import * as React from 'react'
+import ListItemButton from '@mui/material/ListItemButton'
+import ListItemIcon from '@mui/material/ListItemIcon'
+import ListItemText from '@mui/material/ListItemText'
+import ListSubheader from '@mui/material/ListSubheader'
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'
+import ArrowOutwardIcon from '@mui/icons-material/ArrowOutward'
+import AssignmentIcon from '@mui/icons-material/Assignment'
+import AuthContext from '../AuthContext'
+import { makeRequest } from '../utils/requestWrapper'
+import { sections } from '../setting'
 export const MainListItems = () => {
   const [token, setToken] = React.useContext(AuthContext)
-  const availablePages = localStorage.getItem('availablePages').split(',');
+  const availablePages = localStorage.getItem('availablePages').split(',')
   console.log(availablePages)
   return (
   <React.Fragment>
@@ -27,13 +27,13 @@ export const MainListItems = () => {
       </ListItemIcon>
       <ListItemText primary="订单" />
     </ListItemButton>}
-    {availablePages.includes(sections.STORE) && <ListItemButton  href='/store'>
+    {availablePages.includes(sections.STORE) && <ListItemButton href='/store'>
       <ListItemIcon>
         < ArrowOutwardIcon/>
       </ListItemIcon>
       <ListItemText primary="仓库" />
     </ListItemButton>}
-    {availablePages.includes(sections.PRODUCTS) && <ListItemButton  href='/product'>
+    {availablePages.includes(sections.PRODUCTS) && <ListItemButton href='/product'>
       <ListItemIcon>
         < ArrowOutwardIcon/>
       </ListItemIcon>
@@ -58,9 +58,9 @@ export const MainListItems = () => {
       <ListItemText primary="个人信息修改" />
     </ListItemButton>}
 
-    <ListItemButton style={{marginTop:200}} onClick={() => {
-      localStorage.removeItem('token');
-      makeRequest('DELETE','USER_LOGOUT', {token},{token:token})
+    <ListItemButton style={{ marginTop: 200 }} onClick={() => {
+      localStorage.removeItem('token')
+      makeRequest('DELETE', 'USER_LOGOUT', { token }, { token })
         .then(setToken(null))
     }}>
       <ListItemIcon>
@@ -69,7 +69,8 @@ export const MainListItems = () => {
       <ListItemText primary="退出"/>
     </ListItemButton>
   </React.Fragment>
-)};
+  )
+}
 
 export const secondaryListItems = (
   <React.Fragment>
@@ -95,4 +96,4 @@ export const secondaryListItems = (
       <ListItemText primary="Year-end sale" />
     </ListItemButton>
   </React.Fragment>
-);
+)
