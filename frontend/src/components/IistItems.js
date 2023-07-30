@@ -61,7 +61,7 @@ export const MainListItems = () => {
     <ListItemButton style={{ marginTop: 200 }} onClick={() => {
       localStorage.removeItem('token');
       makeRequest('DELETE', 'USER_LOGOUT', { token }, { token })
-        .then( () => {
+        .then(() => {
           setToken(null);
           localStorage.removeItem('availablePages');
         });
