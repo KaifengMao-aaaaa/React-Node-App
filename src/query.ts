@@ -94,7 +94,7 @@ CREATE TABLE productTimeStamp (
   staffId INT,
   description VARCHAR(255)
 );
-CREATE TABLE OrderTimeStamp (
+CREATE TABLE orderTimeStamp (
   ID INT AUTO_INCREMENT PRIMARY KEY,
   time date,
   client VARCHAR(255),
@@ -102,7 +102,7 @@ CREATE TABLE OrderTimeStamp (
   description VARCHAR(255),
   orderId INT
 );
-CREATE TABLE VerficationCode (
+CREATE TABLE verficationCode (
   code INT PRIMARY KEY,
   time date,
   type VARCHAR(255) 
