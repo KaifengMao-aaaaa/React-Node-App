@@ -46,7 +46,7 @@ export const availableSectionForRole = {
   salesManager: ['sales', 'home', 'profile'],
   admin: ['sales', 'store', 'users', 'orders', 'products', 'home', 'history', 'profile'],
   init: ['sales', 'store', 'users', 'orders', 'products', 'home', 'history', 'profile'],
-  newUser: ['home']
+  newUser: ['home', 'profile']
 };
 
 /** *******************************************************Language******************************************************************** */

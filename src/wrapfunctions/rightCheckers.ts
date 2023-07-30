@@ -18,9 +18,5 @@ export async function rightChecker(userId: number, endPoint: string) {
 export async function PageIsAvailable(userId: number, section: string) {
   const result = await search('users', ['role'], ['ID'], [userId]);
   const availablePages = availableSectionForRole[result[0].role];
-  if (availablePages.includes(section)) {
-    return { availablePages: availablePages };
-  } else {
-    return { availablePages: availablePages };
-  }
+  return { availablePages: availablePages };
 }
