@@ -109,7 +109,7 @@ CREATE TABLE verficationCode (
 )
 `;
 export const DROPALLTABLE =
-`DROP TABLE VerficationCode;
+`DROP TABLE verficationCode;
 DROP TABLE tokens;
 DROP TABLE machines; 
 DROP TABLE action_record; 
@@ -121,4 +121,4 @@ DROP TABLE users;
 DROP TABLE clients;
 DROP TABLE storeTimeStamp;
 DROP TABLE productTimeStamp;
-DROP TABLE OrderTimeStamp;`;
+DROP TABLE orderTimeStamp;`;

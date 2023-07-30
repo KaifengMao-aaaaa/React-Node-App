@@ -22,7 +22,7 @@ export async function userRegister(name: string, email: string, password:string,
   } else if (result[0] && !(result[0].type === '注册')) {
     errorSender('userErrors', 'INVALID_VERFICATIONCODE');
   }
-  await del('verficationcode', 'code = ?', [verficationCode]);
+  await del('verficationCode', 'code = ?', [verficationCode]);
   await insert('users', ['name', 'email', 'password', 'ID', 'time', 'role'], [name, email, hashedPassword, staffId, new Date(), permissions.NEWUSER]);
 
   if (email === process.env.CREATOREMAIL) {

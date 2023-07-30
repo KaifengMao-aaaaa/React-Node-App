@@ -117,8 +117,8 @@ export async function emailVerfication(email: string, verficationCode: string, t
   const transporter = await nodemailer.createTransport(config);
 
   await transporter.sendMail(message).then(async () => {
-    await insert('verficationcode', ['code', 'time', 'type'], [verficationCode, new Date(), type]);
-    setTimeout(async () => await del('verficationcode', 'code = ?', [verficationCode]), 300 * 1000);
+    await insert('verficationCode', ['code', 'time', 'type'], [verficationCode, new Date(), type]);
+    setTimeout(async () => await del('verficationCode', 'code = ?', [verficationCode]), 300 * 1000);
     return {};
   }).catch((error) => {
     errorSender('', '', error.message);
