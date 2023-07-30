@@ -10,7 +10,7 @@ function ProtectedRoute ({ component, section }) {
   if (!token) {
     return <Navigate to="/user/login"/>;
   } else if (!availablePages.includes(section)) {
-    return <Navigate to="/"/>;
+    return <Navigate to="/edit"/>;
   }
   return component;
 }

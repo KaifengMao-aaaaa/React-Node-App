@@ -34,9 +34,9 @@ function App () {
           <Route exact path='/user/login' element = {<LoginPage saveId = {setAuth}/>} />
           <Route exact path='/user/register' element = {<SignUp saveId = {setAuth}/>}/>
           <Route exact path='/user/retrievePassword' element = {<RetrievePasswordPage saveId = {setAuth}/>} />
-          <Route element = {<SideBar/>}>
-            <Route path= '/' element = {<ProtectedRoute component = {<HomePage/>} section={sections.HOME}/>} />
-            <Route path= '/order/:orderId' element = {<ProtectedRoute component={<OrderDetailPage/>} section={sections.SALES} />} />
+          <Route element = {<ProtectedRoute component = {<SideBar/>} section={sections.PROFILE}/>}>
+            <Route exact path= '/' element = {<ProtectedRoute component = {<HomePage/>} section={sections.HOME}/>} />
+            <Route exact path= '/order/:orderId' element = {<ProtectedRoute component={<OrderDetailPage/>} section={sections.SALES} />} />
             <Route path= '/order' element = {<ProtectedRoute component={<OrderPage/>} section={sections.SALES}/>} />
             <Route path= '/store' element = {<ProtectedRoute component={<StorePage />} section= {sections.STORE}/>} />
             <Route path= '/product/:productId' element = {<ProtectedRoute component={<ProductDetailPage/>} section={sections.PRODUCTS}/>} />
