@@ -1,39 +1,39 @@
-import * as React from 'react'
-import Table from '@mui/material/Table'
-import TableBody from '@mui/material/TableBody'
-import TableCell from '@mui/material/TableCell'
-import TableContainer from '@mui/material/TableContainer'
-import TableHead from '@mui/material/TableHead'
-import TableRow from '@mui/material/TableRow'
-import Paper from '@mui/material/Paper'
-import '../../index.css'
-import { makeRequest } from '../../utils/requestWrapper'
-import { NotificationManager } from 'react-notifications'
+import * as React from 'react';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import '../../index.css';
+import { makeRequest } from '../../utils/requestWrapper';
+import { NotificationManager } from 'react-notifications';
 
 function ccyFormat (num) {
-  return `${num.toFixed(2)}`
+  return `${num.toFixed(2)}`;
 }
 
 function subtotal (items) {
-  return items.map(({ amount, unitPrice }) => amount * unitPrice).reduce((sum, i) => sum + i, 0)
+  return items.map(({ amount, unitPrice }) => amount * unitPrice).reduce((sum, i) => sum + i, 0);
 }
 
 export default function OrderDetail (props) {
-  const orderId = props.orderId
-  const [orderDetail, setOrderDetail] = React.useState({})
-  const [loading, setLoading] = React.useState(false)
-  const token = localStorage.getItem('token')
-  console.log(token)
+  const orderId = props.orderId;
+  const [orderDetail, setOrderDetail] = React.useState({});
+  const [loading, setLoading] = React.useState(false);
+  const token = localStorage.getItem('token');
   React.useEffect(function () {
     makeRequest('GET', 'ORDER_DETAIL', { orderId }, { token })
       .then(({ data }) => {
-        if (data) { setOrderDetail(data.orderDetail); setLoading(true) }
+        if (data) { setOrderDetail(data.orderDetail); setLoading(true); }
       })
-      .catch((e) => NotificationManager.error(e.response.data))
-  }, [props.selected])
+      .catch((e) => NotificationManager.error(e.response.data));
+  }, [props.selected]);
+
   function handleClick (event) {
-    const type = event.target.id.match(/[a-zA-Z]+/)[0] // Matches alphabetic characters
-    const row = event.target.id.match(/\d+/)[0]
+    const type = event.target.id.match(/[a-zA-Z]+/)[0]; // Matches alphabetic characters
+    const row = event.target.id.match(/\d+/)[0];
     if (props.mode === 'editable') {
       props.setSelectedTriger({
         type,
@@ -41,15 +41,15 @@ export default function OrderDetail (props) {
         productName: type === 'description' ? null : orderDetail.requiredProducts[row].productName,
         orderId,
         value: type === 'description' ? orderDetail.description : Number(orderDetail.requiredProducts[row].amount)
-      })
-      NotificationManager.success(`你选择了${type === 'description' ? orderDetail.description : Number(orderDetail.requiredProducts[row].amount)}`)
+      });
+      NotificationManager.success(`你选择了${type === 'description' ? orderDetail.description : Number(orderDetail.requiredProducts[row].amount)}`);
     }
   }
-  let invoiceSubtotal
-  let invoiceTotal
+  let invoiceSubtotal;
+  let invoiceTotal;
   if (loading) {
-    invoiceSubtotal = subtotal(orderDetail.requiredProducts)
-    invoiceTotal = invoiceSubtotal
+    invoiceSubtotal = subtotal(orderDetail.requiredProducts);
+    invoiceTotal = invoiceSubtotal;
   }
   return (
     <Paper style={{}}>
@@ -99,5 +99,5 @@ export default function OrderDetail (props) {
         <p id='description0' onDoubleClick={handleClick}>{orderDetail.description}</p>
       </Paper>
     </Paper>
-  )
+  );
 }

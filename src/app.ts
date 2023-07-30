@@ -25,12 +25,10 @@ app.get('/clear', async (req, res, next) => {
 });
 app.use('/', topMiddlewares);
 app.use((req, res, next) => {
-  console.log('pass first middleware');
   next();
 });
 app.use('/', rightChecker);
 app.use((req, res, next) => {
-  console.log('pass second middleware');
   next();
 });
 

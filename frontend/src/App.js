@@ -1,29 +1,29 @@
-import './App.css'
-import React from 'react'
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import HomePage from './pages/homepage'
-import SideBar from './components/Layout/SideBar'
-import LoginPage from './pages/loginpage'
-import OrderPage from './pages/orderpage'
-import StorePage from './pages/storePage'
-import OrderDetailPage from './pages/orderDetailPage'
-import ProtectedRoute from './components/Layout/ProtectedRoute'
-import SignUp from './pages/registerPage'
-import ProductPage from './pages/productpage'
-import ProductDetailPage from './pages/productDetailPage'
-import UserPage from './pages/userPage'
-import { AuthProvider } from './AuthContext'
-import HistoryPage from './pages/historyPage'
-import RetrievePasswordPage from './pages/retrievePasswordPage'
-import EditPage from './pages/editPage'
-import { NotificationContainer } from 'react-notifications'
-import { sections } from './setting'
-import 'react-notifications/lib/notifications.css'
+import './App.css';
+import React from 'react';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import HomePage from './pages/homepage';
+import SideBar from './components/Layout/SideBar';
+import LoginPage from './pages/loginpage';
+import OrderPage from './pages/orderpage';
+import StorePage from './pages/storePage';
+import OrderDetailPage from './pages/orderDetailPage';
+import ProtectedRoute from './components/Layout/ProtectedRoute';
+import SignUp from './pages/registerPage';
+import ProductPage from './pages/productpage';
+import ProductDetailPage from './pages/productDetailPage';
+import UserPage from './pages/userPage';
+import { AuthProvider } from './AuthContext';
+import HistoryPage from './pages/historyPage';
+import RetrievePasswordPage from './pages/retrievePasswordPage';
+import EditPage from './pages/editPage';
+import { NotificationContainer } from 'react-notifications';
+import { sections } from './setting';
+import 'react-notifications/lib/notifications.css';
 function App () {
-  const [token, setToken] = React.useState(localStorage.getItem('token'))
+  const [token, setToken] = React.useState(localStorage.getItem('token'));
   function setAuth (token) {
-    localStorage.setItem('token', token)
-    setToken(token)
+    localStorage.setItem('token', token);
+    setToken(token);
   }
 
   return (
@@ -51,7 +51,7 @@ function App () {
 
       <NotificationContainer/>
     </AuthProvider>
-  )
+  );
 }
 
-export default App
+export default App;

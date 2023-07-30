@@ -1,22 +1,36 @@
+import { errorSender } from '../errors';
 import { insert, search, update, directQuery } from './helpers';
-import createHttpError from 'http-errors';
 export async function storeAddType(userId:number, materialName: string, unit: string, unitPrice: number) {
   const result = await search('store', ['materialName'], ['materialName'], [materialName]);
   if (result[0]) {
-    throw createHttpError(400, '物料名字重复');
+    errorSender('storeErrors', 'DUPLICATE_STORE');
   }
   await insert('storeTimeStamp', ['time', 'alteration', 'type', 'staffId', 'description'], [new Date(), 0, materialName, userId, '创建']);
-  await insert('store', ['materialName', 'time', 'consuming', 'remaining', 'unit', 'unitPrice'], [materialName, new Date(), 0, 0, unit, unitPrice]);
+  await insert('store', ['materialName', 'time', 'utilization', 'available', 'unit', 'unitPrice', 'inventoryGap'], [materialName, new Date(), 0, 0, unit, unitPrice, 0]);
   return {};
 }
 
 export async function storeAddAmount(userId: number, description: string, materialName: string, amount: number) {
-  const result = await search('store', ['remaining'], ['materialName'], [materialName]);
+  const result = await search('store', ['available', 'utilization', 'inventoryGap'], ['materialName'], [materialName]);
   if (result[0] === undefined) {
-    throw createHttpError(400, '物料不存在');
+    errorSender('storeErrors', 'NOT_EXIST_MATERIAL');
   }
-  const remaining = result[0].remaining + amount;
-  await update('store', ['remaining'], [remaining], ['materialName'], [materialName]);
+  let inventoryGap = result[0].inventoryGap;
+  let onHand = result[0].available;
+  let utilization = result[0].utilization;
+  if (result[0].inventoryGap > 0) {
+    const difference = result[0].inventoryGap - amount;
+    if (difference <= 0) {
+      inventoryGap = 0;
+      onHand = onHand - difference;
+    } else {
+      inventoryGap = inventoryGap - amount;
+      utilization += amount;
+    }
+  } else {
+    onHand += amount;
+  }
+  await update('store', ['available', 'inventoryGap', 'utilization'], [onHand, inventoryGap, utilization], ['materialName'], [materialName]);
   await insert('storeTimeStamp', ['time', 'alteration', 'type', 'staffId', 'description'], [new Date(), amount, materialName, userId, description !== '' ? description : '无']);
 }
 
@@ -30,9 +44,13 @@ export async function storeAllType() {
 }
 
 export async function storeTimeStamp() {
-  const results = await directQuery(`SELECT ROW_NUMBER() OVER (ORDER BY storeTimeStamp.ID DESC) AS id,DATE_FORMAT(storeTimeStamp.time, '%Y/%m/%d') as time,users.name as staffName, alteration, storeTimeStamp.description, type, description
-            FROM storeTimeStamp
-            Join users 
-            On users.ID = storeTimeStamp.staffId`, []);
-  return { storeTimeStamp: results };
+  try {
+    const results = await directQuery(`SELECT ROW_NUMBER() OVER (ORDER BY storeTimeStamp.ID DESC) AS id,DATE_FORMAT(storeTimeStamp.time, '%Y/%m/%d') as time,users.name as staffName, alteration, storeTimeStamp.description, type, description
+              FROM storeTimeStamp
+              Join users 
+              On users.ID = storeTimeStamp.staffId`, []);
+    return { storeTimeStamp: results };
+  } catch (e) {
+    errorSender('storeErrors', 'GET_STORETIMESTAMP_FAIL');
+  }
 }

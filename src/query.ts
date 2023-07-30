@@ -23,7 +23,9 @@ CREATE TABLE products (
   description VARCHAR(255),
   unitPrice INT,
   unit VARCHAR(255),
-  remaining INT,
+  available INT,
+  requiredProduction INT,
+  productionRate float,
   materials JSON
 );
 CREATE TABLE orders (
@@ -40,8 +42,9 @@ CREATE TABLE orders (
 );
 CREATE TABLE store (
   materialName VARCHAR(255) PRIMARY KEY,
-  consuming INT,
-  remaining INT,
+  utilization INT,
+  available INT,
+  inventoryGap INT,
   unit VARCHAR(255),
   unitPrice INT,
   time date

@@ -1,22 +1,22 @@
-import '../../index.css'
-import { Outlet } from 'react-router-dom'
-import React from 'react'
-import { styled, createTheme, ThemeProvider } from '@mui/material/styles'
-import CssBaseline from '@mui/material/CssBaseline'
-import MuiDrawer from '@mui/material/Drawer'
-import MuiAppBar from '@mui/material/AppBar'
-import Toolbar from '@mui/material/Toolbar'
-import List from '@mui/material/List'
-import Typography from '@mui/material/Typography'
-import Divider from '@mui/material/Divider'
-import IconButton from '@mui/material/IconButton'
-import Badge from '@mui/material/Badge'
-import MenuIcon from '@mui/icons-material/Menu'
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
-import NotificationsIcon from '@mui/icons-material/Notifications'
-import { MainListItems } from '../IistItems'
+import '../../index.css';
+import { Outlet } from 'react-router-dom';
+import React from 'react';
+import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+import MuiDrawer from '@mui/material/Drawer';
+import MuiAppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import List from '@mui/material/List';
+import Typography from '@mui/material/Typography';
+import Divider from '@mui/material/Divider';
+import IconButton from '@mui/material/IconButton';
+import Badge from '@mui/material/Badge';
+import MenuIcon from '@mui/icons-material/Menu';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import NotificationsIcon from '@mui/icons-material/Notifications';
+import { MainListItems } from '../IistItems';
 
-const drawerWidth = 240
+const drawerWidth = 240;
 
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== 'open'
@@ -34,7 +34,7 @@ const AppBar = styled(MuiAppBar, {
       duration: theme.transitions.duration.enteringScreen
     })
   })
-}))
+}));
 
 const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
   ({ theme, open }) => ({
@@ -60,16 +60,16 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
       })
     }
   })
-)
+);
 
 // TODO remove, this demo shouldn't need to reset the theme.
-const defaultTheme = createTheme()
+const defaultTheme = createTheme();
 
 export default function SideBar () {
-  const [open, setOpen] = React.useState(true)
+  const [open, setOpen] = React.useState(true);
   const toggleDrawer = () => {
-    setOpen(!open)
-  }
+    setOpen(!open);
+  };
 
   return (
     <div className="container">
@@ -132,5 +132,5 @@ export default function SideBar () {
         </ThemeProvider>
           <Outlet/>
     </div>
-  )
+  );
 }

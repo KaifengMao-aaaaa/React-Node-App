@@ -52,9 +52,9 @@ router.put('/editUnitPrice', async (req, res, next) => {
 });
 router.put('/editRemaining', async (req, res, next) => {
   console.log('here');
-  const { productId, remaining } = req.body;
+  const { productId, available } = req.body;
   try {
-    res.json(await productEditRemaining(productId, remaining));
+    res.json(await productEditRemaining(productId, available));
   } catch (e) {
     console.log(e);
     next(e);

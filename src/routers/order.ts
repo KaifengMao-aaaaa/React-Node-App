@@ -1,11 +1,20 @@
 import express from 'express';
-import { editOrderDescription, orderCreate, orderListAll, orderDetail, orderEditStatus, orderEditDeadline, orderEditClient, editProductAmout, checkStatus } from '../wrapfunctions/order';
+import { editOrderDescription, orderCreate, orderListAll, orderDetail, orderEditStatus, orderEditDeadline, orderEditClient, editProductAmout, checkStatus, deleteOrder } from '../wrapfunctions/order';
 
 const router = express.Router();
 
 router.get('/detail', async (req, res, next) => {
   const orderId = Number(req.query.orderId);
   const result = await orderDetail(orderId);
+  try {
+    res.json(result);
+  } catch (e) {
+    next(e);
+  }
+});
+router.delete('/delete', async (req, res, next) => {
+  const orderId = Number(req.query.orderId);
+  const result = await deleteOrder(orderId);
   try {
     res.json(result);
   } catch (e) {

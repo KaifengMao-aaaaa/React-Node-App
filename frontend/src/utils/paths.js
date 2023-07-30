@@ -12,6 +12,7 @@ const PATHS = {
   ORDER_EDITDESCRIPTION: '/order/editDescription',
   ORDER_CHECKSTATUS: '/order/checkStatus',
   ORDERS_TIMESTAMP: '/orders/timeStamp',
+  ORDER_DELETE: '/order/delete',
 
   PRODUCT_ALLTYPE: '/product/allType',
   PRODUCT_LISTALL: '/product/listall',
@@ -41,5 +42,5 @@ const PATHS = {
   USER_LOGIN: '/user/login',
 
   PAGE_ISAVAILABLE: '/page/isAvailable'
-}
-export default PATHS
+};
+export default PATHS;

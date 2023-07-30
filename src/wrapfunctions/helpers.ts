@@ -1,9 +1,9 @@
 import bcrypt from 'bcrypt';
 import crypto from 'crypto';
 import pool from '../database';
-import createHttpError from 'http-errors';
 import { v4 as uuidv4 } from 'uuid';
 import { AES, enc } from 'crypto-js';
+import { errorSender } from '../errors';
 export async function insert(table: string, params : string[], values: (any)[], JSONIndex ?: number[]) {
   let insertValues = values;
   if (JSONIndex) {
@@ -16,26 +16,41 @@ export async function insert(table: string, params : string[], values: (any)[], 
   }
   const fields = params.join(',');
   const placeholders = '?,'.repeat(params.length);
-  try { await pool.query(`INSERT INTO ${table} (${fields}) VALUES(${placeholders.slice(0, -1)});`, insertValues); } catch (e) { console.log(e); throw createHttpError(403, '储存到数据库失败'); }
+  try {
+    await pool.query(`INSERT INTO ${table} (${fields}) VALUES(${placeholders.slice(0, -1)});`, insertValues);
+  } catch (e) {
+    errorSender('databaseErrors', 'INSERT_DATABASE_FAIL');
+  }
 }
 export async function del(table: string, where: string, targeValues: (any)[]) {
-  try { await pool.query(`DELETE FROM ${table} WHERE (${where}) ;`, targeValues); } catch (e) { console.log(e); }
+  try {
+    await pool.query(`DELETE FROM ${table} WHERE (${where}) ;`, targeValues);
+  } catch (e) {
+    errorSender('databaseErrors', 'DELETE_DATABASE_FAIL');
+  }
 }
 export async function update(table: string, updateFields: string[], updateValues: any[], conditionFields: string[], conditionValues: (any)[]) {
   const formatCoditions = conditionFields.map((condition) => `${condition} = ?`);
   const formatUpdates = updateFields.map((field) => `${field} = ?`);
-  await pool.query(`UPDATE ${table}
-        SET ${formatUpdates.join(',')}
-        WHERE ${formatCoditions.join(',')};`
-  , updateValues.concat(conditionValues));
+  try {
+    await pool.query(`UPDATE ${table}
+          SET ${formatUpdates.join(',')}
+          WHERE ${formatCoditions.join(',')};`
+    , updateValues.concat(conditionValues));
+  } catch (e) {
+    errorSender('databaseErrors', 'UPDATE_DATABASE_FAIL');
+  }
 }
 export async function search(table: string, getFields: string[], conditionFields: string[], conditionValues: any[]) {
-  const formatCoditions = conditionFields.map((condition) => `${condition} = ?`);
-  const fields = getFields.join(',');
-
-  const conditions = formatCoditions.length > 0 ? `WHERE ${formatCoditions.join(',')}` : '';
-  const [results] = await pool.query(`SELECT ${fields} FROM ${table} ${conditions}`, conditionValues);
-  return results;
+  try {
+    const formatCoditions = conditionFields.map((condition) => `${condition} = ?`);
+    const fields = getFields.join(',');
+    const conditions = formatCoditions.length > 0 ? `WHERE ${formatCoditions.join(',')}` : '';
+    const [results] = await pool.query(`SELECT ${fields} FROM ${table} ${conditions}`, conditionValues);
+    return results;
+  } catch (e) {
+    errorSender('databaseErrors', 'SEARCH_DATABASE_FAIL', e.message);
+  }
 }
 export async function checkPassword(hash: string, password: string): Promise<boolean> {
   const match = await bcrypt.compare(password, hash);
@@ -64,7 +79,11 @@ export async function generateToken(userId: number) {
   const newToken = uuidv4();
   const oneHourLate = new Date();
   oneHourLate.setHours(oneHourLate.getHours() + 1);
-  await insert('tokens', ['token', 'time', 'expirationTime', 'userId'], [newToken, new Date(), oneHourLate, userId]);
+  try {
+    await insert('tokens', ['token', 'time', 'expirationTime', 'userId'], [newToken, new Date(), oneHourLate, userId]);
+  } catch (e) {
+    errorSender('databaseErrors', 'INSERT_DATABASE_FAIL');
+  }
   return newToken;
 }
 export async function getUserFromEmail(email: string) {
@@ -90,4 +109,39 @@ export const encryptForOutput = (data) => {
       element.productId = element.productId ? encrypt(element.productId) : undefined;
     }
   }
+};
+
+export const regularizationPatternTest = (target, pattern) => {
+  return pattern.test(target);
+};
+
+export const getProductById = async (productId) => {
+  const result = await search('products', ['*'], ['ID'], [productId]);
+  return result[0];
+};
+
+export const getMaterialByName = async (materialName) => {
+  const result = await search('store', ['*'], ['MaterialName'], [materialName]);
+  return result[0];
+};
+
+export const getOrderById = async (orderId: number) => {
+  const result = await search('orders', ['*'], ['ID'], [orderId]);
+  return result[0];
+};
+export const getUserById = async (userId) => {
+  const result = await search('users', ['*'], ['ID'], [userId]);
+  return result[0];
+};
+
+export const startTransaction = async () => {
+  await pool.query('START TRANSACTION;');
+};
+
+export const commitTransaction = async () => {
+  await pool.query('COMMIT;');
+};
+
+export const rollbackTransaction = async () => {
+  await pool.query('ROLLBACK;');
 };

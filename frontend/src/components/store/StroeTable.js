@@ -1,11 +1,12 @@
-import * as React from 'react'
-import { DataGrid } from '@mui/x-data-grid'
-import { makeRequest } from '../../utils/requestWrapper'
-import { NotificationManager } from 'react-notifications'
+import * as React from 'react';
+import { DataGrid } from '@mui/x-data-grid';
+import { makeRequest } from '../../utils/requestWrapper';
+import { NotificationManager } from 'react-notifications';
 const columns = [
   { field: 'id', headerName: 'ID' },
   { field: 'materialName', headerName: '物料', type: 'text' },
-  { field: 'consuming', headerName: '正在使用', type: 'number' },
+  { field: 'inventoryGap', headerName: '物料缺口', type: 'number' },
+  { field: 'utilization', headerName: '正在使用', type: 'number' },
   {
     field: 'unitPrice',
     headerName: '单价',
@@ -16,7 +17,7 @@ const columns = [
     type: 'string'
   },
   {
-    field: 'remaining',
+    field: 'available',
     headerName: '剩余',
     type: 'number'
   },
@@ -25,27 +26,27 @@ const columns = [
     headerName: '合计',
     type: 'number',
     valueGetter: (params) =>
-      params.row.remaining + params.row.consuming
+      params.row.available + params.row.utilization
   }
-]
+];
 
 export default function DataTable (props) {
-  const [storeDate, setStroeData] = React.useState([])
-  const token = localStorage.getItem('token')
+  const [storeDate, setStroeData] = React.useState([]);
+  const token = localStorage.getItem('token');
   React.useEffect(function () {
     makeRequest('GET', 'STORE_LISTALL', {}, { token })
       .then(({ data }) => {
-        console.log(data)
+        console.log(data);
         const newData = data.storeList.map((data, index) => {
           return {
             ...data,
             id: index
-          }
-        })
-        setStroeData(newData)
+          };
+        });
+        setStroeData(newData);
       })
-      .catch((e) => NotificationManager.error(e.response.data))
-  }, [props.update])
+      .catch((e) => NotificationManager.error(e.response.data));
+  }, [props.update]);
 
   return (
         <div style={{ height: 400, width: '100%' }}>
@@ -61,5 +62,5 @@ export default function DataTable (props) {
             checkboxSelection
         />
         </div>
-  )
+  );
 }

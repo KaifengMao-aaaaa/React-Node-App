@@ -3,7 +3,7 @@
 const commonEndPointsForSales = ['/order/detail', '/order/checkStatus',
   '/order/listall', '/order/editStatus', '/order/editDeadline',
   '/order/editMaterialAmount', '/order/editProductAmount', '/order/editStartDate',
-  '/order/editDescription', '/order/create'
+  '/order/editDescription', '/order/create', '/order/delete'
 ];
 const commonEndPointsForStore = ['/store/listall', '/store/allType', '/store/add',
   '/store/addType', '/store/timeStamp'];
@@ -48,3 +48,7 @@ export const availableSectionForRole = {
   init: ['sales', 'store', 'users', 'orders', 'products', 'home', 'history', 'profile'],
   newUser: ['home']
 };
+
+/** *******************************************************Language******************************************************************** */
+// const languageOptions = { Chinese: 1, English: 0 };
+export const SL = 1;

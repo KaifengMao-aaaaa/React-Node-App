@@ -1,15 +1,15 @@
-import * as React from 'react'
+import * as React from 'react';
 
-import { Box, Paper, TableRow, TableHead, TableContainer, TableCell, TableBody, Table } from '@mui/material'
-import '../../index.css'
-import { makeRequest } from '../../utils/requestWrapper'
-import { NotificationManager } from 'react-notifications'
+import { Box, Paper, TableRow, TableHead, TableContainer, TableCell, TableBody, Table } from '@mui/material';
+import '../../index.css';
+import { makeRequest } from '../../utils/requestWrapper';
+import { NotificationManager } from 'react-notifications';
 function ccyFormat (num) {
-  return `${num.toFixed(2)}`
+  return `${num.toFixed(2)}`;
 }
 
 function subtotal (items) {
-  return items.map(({ amount, unitPrice }) => amount * unitPrice).reduce((sum, i) => sum + i, 0)
+  return items.map(({ amount, unitPrice }) => amount * unitPrice).reduce((sum, i) => sum + i, 0);
 }
 
 // const rows = [
@@ -19,37 +19,38 @@ function subtotal (items) {
 // ];
 
 export default function ProductDetail (props) {
-  const productId = props.productId
-  const [productDetail, setOrderDetail] = React.useState({})
-  const [loading, setLoading] = React.useState(false)
-  const token = localStorage.getItem('token')
+  const productId = props.productId;
+  console.log(productId);
+  const [productDetail, setOrderDetail] = React.useState({});
+  const [loading, setLoading] = React.useState(false);
+  const token = localStorage.getItem('token');
   React.useEffect(function () {
     makeRequest('GET', 'PRODUCT_DETAIL', { productId }, { token })
       .then(({ data }) => {
-        if (data) { setOrderDetail(data.productDetail); setLoading(true) }
+        if (data) { setOrderDetail(data.productDetail); setLoading(true); }
       })
-      .catch(e => NotificationManager.error(e.response.data))
-  }, [props.selected])
+      .catch(e => NotificationManager.error(e.response.data));
+  }, [props.selected]);
   function handleClick (event) {
-    const type = event.target.id.match(/[a-zA-Z]+/)[0] // Matches alphabetic characters
-    const row = event.target.id.match(/\d+/)[0]
+    const type = event.target.id.match(/[a-zA-Z]+/)[0]; // Matches alphabetic characters
+    const row = event.target.id.match(/\d+/)[0];
     if (props.mode === 'editable') {
-      NotificationManager.success(`你选择了${type !== 'description' ? productDetail.materials[row][type] : productDetail.description}`)
+      NotificationManager.success(`你选择了${type !== 'description' ? productDetail.materials[row][type] : productDetail.description}`);
       props.selectedTriger({
         field: type,
         row,
         materialName: productDetail.materials[row].materialName,
         productId,
         value: type !== 'description' ? productDetail.materials[row][type] : productDetail.description
-      })
+      });
     }
   }
-  let invoiceSubtotal
+  let invoiceSubtotal;
   // let invoiceTaxes
-  let invoiceTotal
+  let invoiceTotal;
   if (loading) {
-    invoiceSubtotal = subtotal(productDetail.materials)
-    invoiceTotal = invoiceSubtotal
+    invoiceSubtotal = subtotal(productDetail.materials);
+    invoiceTotal = invoiceSubtotal;
   }
   return (
     <Box >
@@ -101,5 +102,5 @@ export default function ProductDetail (props) {
         <p onDoubleClick={handleClick} id='description0'>{productDetail.description}</p>
     </Paper>
     </Box>
-  )
+  );
 }

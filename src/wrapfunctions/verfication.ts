@@ -3,7 +3,7 @@ import Mailgen from 'mailgen';
 import dotenv from 'dotenv';
 dotenv.config();
 import { insert, del, search } from './helpers';
-import createHttpError from 'http-errors';
+import { errorSender } from '../errors';
 const config = {
   service: 'gmail',
   auth: {
@@ -56,7 +56,7 @@ export async function notificationEmail(staffId) {
   await transporter.sendMail(message).then(async () => {
     return {};
   }).catch((error) => {
-    throw createHttpError(500, error);
+    errorSender('', '', error.message);
   });
 }
 export async function permissionChangedEmail(email, toPermission) {
@@ -79,7 +79,7 @@ export async function permissionChangedEmail(email, toPermission) {
   await transporter.sendMail(message).then(async () => {
     return {};
   }).catch((error) => {
-    throw createHttpError(500, error);
+    errorSender('', '', error.message);
   });
 }
 export async function emailVerfication(email: string, verficationCode: string, type: string) {
@@ -121,6 +121,6 @@ export async function emailVerfication(email: string, verficationCode: string, t
     setTimeout(async () => await del('verficationcode', 'code = ?', [verficationCode]), 300 * 1000);
     return {};
   }).catch((error) => {
-    throw createHttpError(500, error);
+    errorSender('', '', error.message);
   });
 }
