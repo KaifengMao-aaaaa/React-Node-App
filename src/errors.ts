@@ -305,7 +305,6 @@ const allErrorTtpes = {
   orderErrors
 };
 export function errorSender(errorType: string, key: string, e ?: string | undefined) {
-  console.log(allErrorTtpes[errorType]);
   throw createHttpError(allErrorTtpes[errorType][key].code,
     allErrorTtpes[errorType][key].UE[SL]);
 }

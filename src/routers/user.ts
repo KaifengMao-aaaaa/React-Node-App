@@ -31,7 +31,6 @@ router.get('/listall', async (req, res, next) => {
 
 router.post('/register', async (req, res, next) => {
   const { name, email, password, verficationCode } = req.body;
-  console.log(verficationCode);
   try {
     res.json(await userRegister(name, email, password, verficationCode));
   } catch (e) {

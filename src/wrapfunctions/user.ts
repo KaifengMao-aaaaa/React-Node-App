@@ -16,7 +16,7 @@ export async function userRegister(name: string, email: string, password:string,
   if (existedEmail[0]) {
     errorSender('userErrors', 'EXISTED_EMAIL');
   }
-  const result = await search('verficationcode', ['type'], ['code'], [verficationCode]);
+  const result = await search('verficationCode', ['type'], ['code'], [verficationCode]);
   if (!result[0]) {
     errorSender('userErrors', 'INVALID_VERFICATIONCODE');
   } else if (result[0] && !(result[0].type === '注册')) {
@@ -47,7 +47,6 @@ export async function login (email: string, password: string) {
 }
 
 export async function logout(token:string) {
-  console.log(token);
   await del('tokens', 'token = ?', [token]);
   return {};
 }
